@@ -6,3 +6,5 @@ Suck my ass operations
 kom nu, man u i finalen
 
 vi prøver igen?
+
+Drengerøve
