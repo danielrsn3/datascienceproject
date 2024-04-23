@@ -22,9 +22,8 @@ vehicles.drop(columns=['size'], inplace=True) # Many missings
 vehicles.drop(columns=['region'], inplace=True) # Execcive beacuse of state coloum
 vehicles.drop(columns=['model'], inplace=True) # Poor data quality
 
+
 ####### Modifying observations #######
-
-
 # Remove rows containing 'salvage' in the 'condition' variable
 vehicles[vehicles['condition'] != 'salvage']
 
@@ -49,15 +48,11 @@ vehicles['cylinders']
 vehicles['cylinders'] = vehicles['cylinders'].str.replace(' cylinders', '').str.replace('cylinders', '') 
 
 
-
 ####### Saving as a new csv file #######
 vehicles.to_csv('Data/vehicles_clean.csv', index=False)
 
 
-
-
-
-####### Correcting data types #######
+#### FUNCTION TO BE CALLED TO CORRECT DATA TYPES ####
 # Convert each column to correct data type (creating function)
 def apply_data_types(df):
     df['manufacturer'] = df['manufacturer'].astype('category')
@@ -72,4 +67,6 @@ def apply_data_types(df):
     df['state'] = df['state'].astype('category')
     df['year'] = df['year'].astype('Int64') # To remove decimal points / Truncates
     df['year'] = df['year'].astype('category')
+    df['odometer_range'] = df['odometer_range'].astype('category')
     return df
+
