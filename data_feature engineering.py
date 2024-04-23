@@ -2,6 +2,9 @@
 import pandas as pd
 vehicles = pd.read_csv('Data/vehicles_clean.csv') # Uploading the data
 vehicles.dtypes # Display the data types of each column
+from data_preprocessing import apply_data_types
+apply_data_types(vehicles)
+vehicles.dtypes # Display the data types of each column
 
 
 # Stratified sampling / split

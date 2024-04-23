@@ -49,11 +49,9 @@ vehicles['cylinders']
 vehicles['cylinders'] = vehicles['cylinders'].str.replace(' cylinders', '').str.replace('cylinders', '') 
 
 
-
 ####### Correcting data types #######
-# Display the data types of each column
-vehicles.dtypes
-# Convert each column to categorical data type
+# Convert each column to correct data type
+vehicles.dtypes # Display the data types of each column
 vehicles['manufacturer'] = vehicles['manufacturer'].astype('category')
 vehicles['condition'] = vehicles['condition'].astype('category')
 vehicles['cylinders'] = vehicles['cylinders'].astype('category')
@@ -66,7 +64,27 @@ vehicles['paint_color'] = vehicles['paint_color'].astype('category')
 vehicles['state'] = vehicles['state'].astype('category')
 vehicles['year'] = vehicles['year'].astype('Int64') # To remove decimal points / Truncates 
 vehicles['year'] = vehicles['year'].astype('category')
-vehicles.dtypes
+vehicles.dtypes # Display the data types of each column
+
+
+def apply_data_types(df):
+    df['manufacturer'] = df['manufacturer'].astype('category')
+    df['condition'] = df['condition'].astype('category')
+    df['cylinders'] = df['cylinders'].astype('category')
+    df['fuel'] = df['fuel'].astype('category')
+    df['title_status'] = df['title_status'].astype('category')
+    df['transmission'] = df['transmission'].astype('category')
+    df['drive'] = df['drive'].astype('category')
+    df['type'] = df['type'].astype('category')
+    df['paint_color'] = df['paint_color'].astype('category')
+    df['state'] = df['state'].astype('category')
+    df['year'] = df['year'].astype('Int64') # To remove decimal points / Truncates
+    df['year'] = df['year'].astype('category')
+    return df
+
+# Applying data types to each variable in the vehicles DataFrame
+vehicles = apply_data_types(vehicles)
+
 
 
 ####### Saving as a new csv file #######
