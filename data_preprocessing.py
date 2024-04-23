@@ -29,13 +29,16 @@ print("Price range (min, max):", price_range) # Display 'price range'
 vehicles = vehicles[vehicles['price'] < 1000] # Removing rows where price is below 5000
 vehicles[~vehicles['region'].str.contains('/')] # Removing all observations where region variable has a '/'
 
+# Removing "cylinders" in all the rows from the column cylinder
+vehicles['cylinders']
+vehicles['cylinders'] = vehicles['cylinders'].str.replace(' cylinders', '').str.replace('cylinders', '') 
+
 # Creating ranges for 'odometer'
 bins = [0, 5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 55000, 60000, 65000, 70000, float('inf')]  # Adjust these ranges as needed # Define the ranges for the bins
 labels = ['0-5000', '5000-10000', '10000-15000', '15000-20000', '20000-25000', '25000-30000', '30000-35000', '35000-40000', '40000-45000', '45000-50000', '50000-55000', '55000-60000', '60000-65000', '65000-70000', '70000+'] # Define labels for the bins
 vehicles['odometer_range'] = pd.cut(vehicles['odometer'], bins=bins, labels=labels, right=False) # Create a new column 'odometer_range' with the binned values
 print(vehicles) # Display the updated DataFrame with the new column
 vehicles.drop(columns=['odometer'], inplace=True) # Drop the old 'odometer' variable
-
 
 ####### Correcting data types #######
 vehicles['year'] = vehicles['year'].astype('Int64')
