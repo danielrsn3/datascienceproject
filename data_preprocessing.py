@@ -49,24 +49,16 @@ vehicles['cylinders']
 vehicles['cylinders'] = vehicles['cylinders'].str.replace(' cylinders', '').str.replace('cylinders', '') 
 
 
+
+####### Saving as a new csv file #######
+vehicles.to_csv('Data/vehicles_clean.csv', index=False)
+
+
+
+
+
 ####### Correcting data types #######
-# Convert each column to correct data type
-vehicles.dtypes # Display the data types of each column
-vehicles['manufacturer'] = vehicles['manufacturer'].astype('category')
-vehicles['condition'] = vehicles['condition'].astype('category')
-vehicles['cylinders'] = vehicles['cylinders'].astype('category')
-vehicles['fuel'] = vehicles['fuel'].astype('category')
-vehicles['title_status'] = vehicles['title_status'].astype('category')
-vehicles['transmission'] = vehicles['transmission'].astype('category')
-vehicles['drive'] = vehicles['drive'].astype('category')
-vehicles['type'] = vehicles['type'].astype('category')
-vehicles['paint_color'] = vehicles['paint_color'].astype('category')
-vehicles['state'] = vehicles['state'].astype('category')
-vehicles['year'] = vehicles['year'].astype('Int64') # To remove decimal points / Truncates 
-vehicles['year'] = vehicles['year'].astype('category')
-vehicles.dtypes # Display the data types of each column
-
-
+# Convert each column to correct data type (creating function)
 def apply_data_types(df):
     df['manufacturer'] = df['manufacturer'].astype('category')
     df['condition'] = df['condition'].astype('category')
@@ -81,11 +73,3 @@ def apply_data_types(df):
     df['year'] = df['year'].astype('Int64') # To remove decimal points / Truncates
     df['year'] = df['year'].astype('category')
     return df
-
-# Applying data types to each variable in the vehicles DataFrame
-vehicles = apply_data_types(vehicles)
-
-
-
-####### Saving as a new csv file #######
-vehicles.to_csv('Data/vehicles_clean.csv', index=False)
