@@ -29,6 +29,9 @@ print("Price range (min, max):", price_range) # Display 'price range'
 vehicles = vehicles[vehicles['price'] < 1000] # Removing rows where price is below 5000
 vehicles[~vehicles['region'].str.contains('/')] # Removing all observations where region variable has a '/'
 
+# Removing "cylinders" in all the rows from the column cylinder
+vehicles['cylinders']
+vehicles['cylinders'] = vehicles['cylinders'].str.replace(' cylinders', '').str.replace('cylinders', '') 
 
 ####### Correcting data types #######
 vehicles['year'] = vehicles['year'].astype('Int64')
