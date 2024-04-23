@@ -1,4 +1,5 @@
 import pandas as pd # Import pandas
+pd.set_option('display.max_columns', None) # Allow to see all columns when viewing data
 vehicles = pd.read_csv('Data/vehicles_no_url.csv') # Uploading the data
 print(vehicles.columns) # View all cloums in the dataframe
 vehicles.info # Summary of the DataFrame
@@ -7,6 +8,15 @@ vehicles.dtypes # Display the data types of each column
 
 
 ####################################### PREPROCESSING #######################################
+
+####### Remove excessive variables #######
+# Drop the 'county' variable from the DataFrame since it still has missings for some reason (find ud af hvorfor)
+vehicles.drop(columns=['county'], inplace=True)
+# Removing the VIN column as it has no predictive power
+vehicles.drop(columns=['VIN'], inplace=True)
+
+####### Correcting data types #######
+
 
 ####### Handle missing values #######
 vehicles.isna().any() # In what coloums are there missings?
@@ -17,9 +27,7 @@ vehicles[numeric_columns] = vehicles[numeric_columns].fillna(vehicles[numeric_co
 # Impute missing values for categorical columns with mode
 categorical_columns = vehicles.select_dtypes(exclude='number').columns
 vehicles[categorical_columns] = vehicles[categorical_columns].fillna(vehicles[categorical_columns].mode().iloc[0])
-# Drop the 'county' variable from the DataFrame since it still has missings for some reason (find ud af hvorfor)
-vehicles.drop(columns=['county'], inplace=True)
-# Removing dublicates
+# Removing duplicates
 vehicles[vehicles.duplicated()]
 vehicles.drop_duplicates(inplace=True)
 # View missing values again
