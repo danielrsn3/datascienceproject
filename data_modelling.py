@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 import numpy as np
-# Selecting numerical features and target variable
+# Selecting numerical features and target variable (only works with numerical (int))
 numerical_features = ['year', 'odometer']
 X = vehicles_clean[numerical_features]  # Features
 y = vehicles_clean['price']  # Target variable
