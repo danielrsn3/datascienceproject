@@ -1,85 +1,67 @@
+####### UPLOADING DATA #######
 import pandas as pd # Import pandas
 pd.set_option('display.max_columns', None) # Allow to see all columns when viewing data
 vehicles = pd.read_csv('Data/vehicles_no_url.csv') # Uploading the data
+
+####### GENERAL COMMANDS TO VIEW STUFF #######
 print(vehicles.columns) # View all cloums in the dataframe
 vehicles.info # Summary of the DataFrame
 print(vehicles['year']) # View specific variables
 vehicles.dtypes # Display the data types of each column
 
 ####################################### PREPROCESSING #######################################
-
 ####### Remove excessive variables #######
-# Removing the 'id' column
-vehicles.drop(columns=['id'], inplace=True)
-# Drop the 'county' variable from the DataFrame since it still has missings for some reason (find ud af hvorfor)
-vehicles.drop(columns=['county'], inplace=True)
-# Removing the VIN column as it has no predictive power
-vehicles.drop(columns=['VIN'], inplace=True)
-# Removing the posting_date column
-vehicles.drop(columns=['posting_date'], inplace=True)
-# Removing latitude and longtitude columns
-vehicles.drop(columns=['lat'], inplace=True)
-vehicles.drop(columns=['long'], inplace=True)
-# Removing size column because of many missings
-vehicles.drop(columns=['size'], inplace=True)
+# Removing the columns
+vehicles.drop(columns=['id'], inplace=True) # Useless
+vehicles.drop(columns=['county'], inplace=True) # No predictive power
+vehicles.drop(columns=['VIN'], inplace=True) # Useless
+vehicles.drop(columns=['posting_date'], inplace=True) # We just need the year of the car, not the posting date
+vehicles.drop(columns=['lat'], inplace=True) # Useless
+vehicles.drop(columns=['long'], inplace=True) # Useless
+vehicles.drop(columns=['size'], inplace=True) # Many missings
+vehicles.drop(columns=['region'], inplace=True) # Execcive beacuse of state coloum
+vehicles.drop(columns=['model'], inplace=True) # Poor data quality
 
 ####### Modifying observations #######
-price_range = (vehicles['price'].min(), vehicles['price'].max()) # Calculate 'price' range
-print("Price range (min, max):", price_range) # Display 'price range'
-vehicles = vehicles[vehicles['price'] < 1000] # Removing rows where price is below 5000
-vehicles[~vehicles['region'].str.contains('/')] # Removing all observations where region variable has a '/'
 
-# Creating ranges for 'odometer'
-bins = [0, 5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 55000, 60000, 65000, 70000, float('inf')]  # Adjust these ranges as needed # Define the ranges for the bins
-labels = ['0-5000', '5000-10000', '10000-15000', '15000-20000', '20000-25000', '25000-30000', '30000-35000', '35000-40000', '40000-45000', '45000-50000', '50000-55000', '55000-60000', '60000-65000', '65000-70000', '70000+'] # Define labels for the bins
-vehicles['odometer_range'] = pd.cut(vehicles['odometer'], bins=bins, labels=labels, right=False) # Create a new column 'odometer_range' with the binned values
-print(vehicles) # Display the updated DataFrame with the new column
-vehicles.drop(columns=['odometer'], inplace=True) # Drop the old 'odometer' variable
+# Remove rows containing 'salvage' in the 'condition' variable
+vehicles[vehicles['condition'] != 'salvage']
+
+# Removing rows where price is below 1000
+vehicles = vehicles[vehicles['price'] > 1000] # To exclude damaged cars and listings with no intention of selling to that price
+print((vehicles['price'].min(), vehicles['price'].max())) # View price range
+
+# Creating Ranges for 'odometer'
+    # Define the ranges for the bins
+bins = [0, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000, 160000, 170000, 180000, 190000, 200000, float('inf')]
+    # Define labels for the bins
+labels = ['0-10000', '10000-20000', '20000-30000', '30000-40000', '40000-50000', '50000-60000', '60000-70000', '70000-80000', '80000-90000', '90000-100000', '100000-110000', '110000-120000', '120000-130000', '130000-140000', '140000-150000', '150000-160000', '160000-170000', '170000-180000', '180000-190000', '190000-200000', '200000+']
+    # Create a new column 'odometer_range' with the binned values
+vehicles['odometer_range'] = pd.cut(vehicles['odometer'], bins=bins, labels=labels, right=False)
+    # Drop the old 'odometer' variable
+vehicles.drop(columns=['odometer'], inplace=True)
+    # Display the count of values in each bin
+print(vehicles['odometer_range'].value_counts())
 
 
 ####### Correcting data types #######
-vehicles['year'] = vehicles['year'].astype('Int64')
-vehicles['year'] = vehicles['year'].astype('object')
-
-####### Handle missing values #######
-vehicles.isna().any() # In what coloums are there missings?
-print(vehicles.isnull().sum()) # Amount of missing in each coloum
-# Impute missing values for numeric columns with mean
-numeric_columns = vehicles.select_dtypes(include='number').columns
-vehicles[numeric_columns] = vehicles[numeric_columns].fillna(vehicles[numeric_columns].mean())
-# Impute missing values for categorical columns with mode
-categorical_columns = vehicles.select_dtypes(exclude='number').columns
-vehicles[categorical_columns] = vehicles[categorical_columns].fillna(vehicles[categorical_columns].mode().iloc[0])
-# Removing duplicates
-vehicles[vehicles.duplicated()]
-vehicles.drop_duplicates(inplace=True)
-# View missing values again
-print(vehicles.isnull().sum()) # 0 Missing now!
-
-
-####### Handle Outliers for numerical variables #######
-# Remove outliers in the 'price' column using IQR method
-Q1 = vehicles['price'].quantile(0.25)
-Q3 = vehicles['price'].quantile(0.75)
-IQR = Q3 - Q1
-lower_bound = Q1 - 1.5 * IQR
-upper_bound = Q3 + 1.5 * IQR
-vehicles = vehicles[(vehicles['price'] >= lower_bound) & (vehicles['price'] <= upper_bound)]
-# Remove outliers in the 'odometer' column using IQR method
-Q1 = vehicles['odometer'].quantile(0.25)
-Q3 = vehicles['odometer'].quantile(0.75)
-IQR = Q3 - Q1
-lower_bound = Q1 - 1.5 * IQR
-upper_bound = Q3 + 1.5 * IQR
-vehicles = vehicles[(vehicles['odometer'] >= lower_bound) & (vehicles['odometer'] <= upper_bound)]
-
-####### Scale numerical variables #######
-#from sklearn.preprocessing import StandardScaler, MaxAbsScaler
-#scaler = MaxAbsScaler()
-#vehicles[["price", "year"]] = scaler.fit_transform(vehicles[["price", "year"]])
-
-####### Remove near zero variance #######
+# Display the data types of each column
+vehicles.dtypes
+# Convert each column to categorical data type
+vehicles['manufacturer'] = vehicles['manufacturer'].astype('category')
+vehicles['condition'] = vehicles['condition'].astype('category')
+vehicles['cylinders'] = vehicles['cylinders'].astype('category')
+vehicles['fuel'] = vehicles['fuel'].astype('category')
+vehicles['title_status'] = vehicles['title_status'].astype('category')
+vehicles['transmission'] = vehicles['transmission'].astype('category')
+vehicles['drive'] = vehicles['drive'].astype('category')
+vehicles['type'] = vehicles['type'].astype('category')
+vehicles['paint_color'] = vehicles['paint_color'].astype('category')
+vehicles['state'] = vehicles['state'].astype('category')
+vehicles['year'] = vehicles['year'].astype('Int64') # To remove decimal points / Truncates 
+vehicles['year'] = vehicles['year'].astype('category')
+vehicles.dtypes
 
 
-#### Saving as a new csv file ####
+####### Saving as a new csv file #######
 vehicles.to_csv('Data/vehicles_clean.csv', index=False)
