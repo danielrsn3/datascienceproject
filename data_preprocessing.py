@@ -24,6 +24,7 @@ vehicles.drop(columns=['model'], inplace=True) # Poor data quality
 
 ####### Modifying observations #######
 
+
 # Remove rows containing 'salvage' in the 'condition' variable
 vehicles[vehicles['condition'] != 'salvage']
 
@@ -42,6 +43,11 @@ vehicles['odometer_range'] = pd.cut(vehicles['odometer'], bins=bins, labels=labe
 vehicles.drop(columns=['odometer'], inplace=True)
     # Display the count of values in each bin
 print(vehicles['odometer_range'].value_counts())
+
+# Removing "cylinders" in all the rows from the column cylinder
+vehicles['cylinders']
+vehicles['cylinders'] = vehicles['cylinders'].str.replace(' cylinders', '').str.replace('cylinders', '') 
+
 
 
 ####### Correcting data types #######
