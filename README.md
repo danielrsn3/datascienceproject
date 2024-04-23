@@ -1,12 +1,9 @@
-# datascienceproject
+# Data Science Project
 Repos for the second part of the data science project
 
-Suck my ass operations
 
-kom nu, man u i finalen
-
-vi prøver igen?
-
-Drengerøve
-
-commit
+# Four files
+data processing
+data feature engineering
+data exloration
+data modelling
