@@ -1,11 +1,12 @@
 ####### UPLOADING DATA #######
 import pandas as pd # Import pandas
 pd.set_option('display.max_columns', None) # Allow to see all columns when viewing data
+pd.set_option('display.float_format', lambda x: '%.3f' % x) # Prevent scientific numbers
 vehicles = pd.read_csv('Data/vehicles_no_url.csv') # Uploading the data
 
 ####### GENERAL COMMANDS TO VIEW STUFF #######
 print(vehicles.columns) # View all cloums in the dataframe
-vehicles.info # Summary of the DataFrame
+vehicles.info() # Summary of the DataFrame
 print(vehicles['year']) # View specific variables
 vehicles.dtypes # Display the data types of each column
 
@@ -19,13 +20,13 @@ vehicles.drop(columns=['posting_date'], inplace=True) # We just need the year of
 vehicles.drop(columns=['lat'], inplace=True) # Useless
 vehicles.drop(columns=['long'], inplace=True) # Useless
 vehicles.drop(columns=['size'], inplace=True) # Many missings
-vehicles.drop(columns=['region'], inplace=True) # Execcive beacuse of state coloum
+vehicles.drop(columns=['region'], inplace=True) # Excessive because of state coloum
 vehicles.drop(columns=['model'], inplace=True) # Poor data quality
 
 
 ####### Modifying observations #######
 # Remove rows containing 'salvage' in the 'condition' variable
-vehicles[vehicles['condition'] != 'salvage']
+vehicles = vehicles[vehicles['condition'] != 'salvage']
 
 # Removing rows where price is below 1000
 vehicles = vehicles[vehicles['price'] > 1000] # To exclude damaged cars and listings with no intention of selling to that price
@@ -47,10 +48,8 @@ print(vehicles['odometer_range'].value_counts())
 vehicles['cylinders']
 vehicles['cylinders'] = vehicles['cylinders'].str.replace(' cylinders', '').str.replace('cylinders', '') 
 
-
 ####### Saving as a new csv file #######
 vehicles.to_csv('Data/vehicles_clean.csv', index=False)
-
 
 #### FUNCTION TO BE CALLED TO CORRECT DATA TYPES ####
 # Convert each column to correct data type (creating function)
