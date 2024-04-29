@@ -61,3 +61,24 @@ vehicles = vehicles[(vehicles['odometer'] >= lower_bound) & (vehicles['odometer'
 
 ####### Remove near zero variance #######
 
+####### Lumping #######
+print(vehicles['manufacturer'].value_counts())
+
+# Example of how to perform lumping based on a threshold
+# Define a Function to Lump Categories
+def lump_categories(series, threshold=100): # set threshold
+    counts = series.value_counts()
+    return series.apply(lambda x: x if counts[x] > threshold else 'Other')
+# Using the threshold-based lumping
+vehicles['manufacturer'] = lump_categories(vehicles['manufacturer'], threshold=3)
+
+# Example of how to perform lumping based on a manual specification
+def manual_lump(series):
+    mapping = {
+        'fiat': 'other', # insert all categories of the variable and manually specify new category
+        'mini': 'other',
+        'mitsubishi': 'other',
+        'volvo': 'other'
+    }
+    return series.map(mapping)
+vehicles['manufacturer'] = manual_lump(vehicles['manufacturer'])
