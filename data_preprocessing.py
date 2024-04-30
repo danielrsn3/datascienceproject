@@ -36,7 +36,6 @@ vehicles.rename(columns={'fuel': 'fuel_type'}, inplace=True)
 vehicles.rename(columns={'type': 'car_type'}, inplace=True)
 
 
-
 #### FUNCTION TO BE CALLED TO CORRECT DATA TYPES ####
 # Convert each column to correct data type (creating function)
 # This function will be ran in 'feature engineering'
@@ -48,7 +47,7 @@ def apply_data_types(df):
     df['title_status'] = df['title_status'].astype('category')
     df['transmission'] = df['transmission'].astype('category')
     df['drive'] = df['drive'].astype('category')
-    df['car_type'] = df['type'].astype('category')
+    df['car_type'] = df['car_type'].astype('category')
     df['paint_color'] = df['paint_color'].astype('category')
     df['state'] = df['state'].astype('category')
     df['year'] = df['year'].astype('Int64') # To remove decimal points / Truncates

@@ -3,10 +3,10 @@ Repos for the second part of the data science project
 
 
 # Four files
-data processing
+Data processing
 
-data feature engineering
+Data exploration
 
-data exloration
+Data feature engineering
 
-data modelling
+Data modelling
