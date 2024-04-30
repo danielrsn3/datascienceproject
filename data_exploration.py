@@ -1,9 +1,9 @@
-# To prevent scientific numbers
-pd.set_option('display.float_format', lambda x: '%.3f' % x)
-
 # Importing the relevant libraries
 import pandas as pd
 import matplotlib.pyplot as plt
+
+# To prevent scientific numbers
+pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 # Load the data
 vehicles = pd.read_csv('Data/vehicles_clean.csv') # Uploading the data
@@ -15,11 +15,11 @@ vehicles['year'] = vehicles['year'].astype('Int64') # Treat year as numeric to g
 vehicles.describe(include='all') # Get summary statistics of all variables
 vehicles.dtypes # Display the data types of each column
 
+###### Summary statistics ######
+vehicles.describe() # for numerical variable
+vehicles.select_dtypes(include=['category']).describe() # for categorical variables
 
-
-
-###### DATA EXPLORATION ######
-
+###### Visualizations ######
 # Histogram of the 'price' column with prices up to $100,000
 plt.figure(figsize=(12, 6))
 plt.hist(vehicles['price'][vehicles['price'] <= 100000], bins=50, color='blue', edgecolor='black')
@@ -67,12 +67,64 @@ plt.grid(axis='y')
 plt.show()
     # Remove motercycles / Multiple manufactures with very high average price
 
-# Filtering the data for entries where the manufacturer is 'mercedes-benz'
-mercedes_benz_data = vehicles[vehicles['manufacturer'] == 'mercedes-benz']
-# Displaying the filtered data
-mercedes_benz_data.sort_values(ascending=False, by='price')
-    # Outliers
 
+filtered_data = vehicles[(vehicles['price'] <= 100000) & (vehicles['year'].notna())]
+# Correlation between categorical features
+from scipy.stats import chi2_contingency
+import numpy as np
+
+def cramers_v(x, y):
+    """Calculate Cramer's V statistic for two categorical series."""
+    contingency_table = pd.crosstab(x, y)
+    chi2, _, _, _ = chi2_contingency(contingency_table)
+    n = contingency_table.sum().sum()
+    phi2 = chi2 / n
+    r, k = contingency_table.shape
+    phi2corr = max(0, phi2 - ((k-1)*(r-1))/(n-1))
+    rcorr = r - ((r-1)**2)/(n-1)
+    kcorr = k - ((k-1)**2)/(n-1)
+    return np.sqrt(phi2corr / min((kcorr-1), (rcorr-1)))
+
+# Identify categorical columns
+categorical_columns = vehicles.select_dtypes(include=['category']).columns
+
+# Compute Cramer's V matrix
+cramers_v_matrix = pd.DataFrame(index=categorical_columns, columns=categorical_columns)
+
+# Optimizing the computation of Cramer's V matrix
+for i, col1 in enumerate(categorical_columns):
+    for col2 in categorical_columns[i:]:  # Start from current index to avoid recomputation
+        if col1 == col2:
+            # The correlation of a variable with itself is 1
+            cramers_v_value = 1.0
+        else:
+            cramers_v_value = cramers_v(vehicles[col1], vehicles[col2])
+        
+        cramers_v_matrix.loc[col1, col2] = cramers_v_value
+        cramers_v_matrix.loc[col2, col1] = cramers_v_value  # Symmetric value
+
+cramers_v_matrix
+
+##### HEATMAP ######
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Assuming 'cramers_v_matrix' is already calculated and available
+# Ensure the data is in float format for plotting
+cramers_v_matrix = cramers_v_matrix.astype(float)
+
+# Create a heatmap for Cramer's V matrix
+plt.figure(figsize=(10, 8))  # Adjust the size of the plot as necessary
+heatmap = sns.heatmap(
+    cramers_v_matrix,        # The Cramer's V matrix data
+    annot=True,              # Enable annotations inside the quadrants
+    fmt=".2f",               # Format numbers to two decimal places
+    cmap="viridis",          # Color map for different values in the heatmap
+    cbar=True,               # Enable the color bar on the side
+    annot_kws={'size': 12, 'color': 'black'}  # Set annotation font size and color for visibility
+)
+plt.title('Heatmap of Cramer\'s V Statistics Between Categorical Features')  # Title of the plot
+plt.show()  # Display the plot
 
 
 

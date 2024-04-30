@@ -22,14 +22,13 @@ vehicles.drop(columns=['long'], inplace=True) # Excessive because of state colou
 vehicles.drop(columns=['region'], inplace=True) # Excessive because of state coloum
 vehicles.drop(columns=['size'], inplace=True) # Too Many missings / Craigslist sellers are not using this / 72 % missing
 vehicles.drop(columns=['model'], inplace=True) # Poor data quality
+vehicles.drop(columns=['title_status'], inplace=True) # Poor data quality
 
 # Removing "cylinders" in all the rows from the column cylinder
 vehicles['cylinders']
 vehicles['cylinders'] = vehicles['cylinders'].str.replace(' cylinders', '').str.replace('cylinders', '') 
 
-######## Remaning variables #######
-# odometer
-vehicles.rename(columns={'odometer': 'mileage'}, inplace=True)
+######## Renaming variables #######
 # fuel
 vehicles.rename(columns={'fuel': 'fuel_type'}, inplace=True)
 # type
@@ -44,7 +43,6 @@ def apply_data_types(df):
     df['condition'] = df['condition'].astype('category')
     df['cylinders'] = df['cylinders'].astype('category')
     df['fuel_type'] = df['fuel_type'].astype('category')
-    df['title_status'] = df['title_status'].astype('category')
     df['transmission'] = df['transmission'].astype('category')
     df['drive'] = df['drive'].astype('category')
     df['car_type'] = df['car_type'].astype('category')
@@ -52,7 +50,7 @@ def apply_data_types(df):
     df['state'] = df['state'].astype('category')
     df['year'] = df['year'].astype('Int64') # To remove decimal points / Truncates
     df['year'] = df['year'].astype('category')
-    df['mileage'] = df['mileage'].astype('category')
+    df['odometer'] = df['odometer'].astype('category')
     return df
 
 ####### Saving as a new csv file #######
