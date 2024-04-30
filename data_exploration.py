@@ -4,12 +4,11 @@ pd.set_option('display.float_format', lambda x: '%.3f' % x)
 # Importing the relevant libraries
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Load the data
 vehicles = pd.read_csv('Data/vehicles_clean.csv') # Uploading the data
 vehicles.dtypes # Display the data types of each column
-from data_preprocessing import apply_data_types
+from data_preprocessing import apply_data_types # Function from preprocessing
 apply_data_types(vehicles)
 vehicles.dtypes # Display the data types of each column
 

@@ -82,3 +82,42 @@ def manual_lump(series):
     }
     return series.map(mapping)
 vehicles['manufacturer'] = manual_lump(vehicles['manufacturer'])
+
+
+
+
+
+
+
+
+
+####### Modifying observations #######
+# Remove rows containing 'salvage' in the 'condition' variable
+vehicles = vehicles[vehicles['condition'] != 'salvage']
+
+# Removing rows where price is below 1000
+vehicles = vehicles[vehicles['price'] > 1000] # To exclude damaged cars and listings with no intention of selling to that price
+print((vehicles['price'].min(), vehicles['price'].max())) # View price range
+
+
+
+# Creating Ranges for 'odometer' ( LAV OM TIL mileage)
+    # Define the ranges for the bins
+bins = [0, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000, 160000, 170000, 180000, 190000, 200000, float('inf')]
+    # Define labels for the bins
+labels = ['0-10000', '10000-20000', '20000-30000', '30000-40000', '40000-50000', '50000-60000', '60000-70000', '70000-80000', '80000-90000', '90000-100000', '100000-110000', '110000-120000', '120000-130000', '130000-140000', '140000-150000', '150000-160000', '160000-170000', '170000-180000', '180000-190000', '190000-200000', '200000+']
+    # Create a new column 'odometer_range' with the binned values
+vehicles['odometer_range'] = pd.cut(vehicles['odometer'], bins=bins, labels=labels, right=False)
+    # Drop the old 'odometer' variable
+vehicles.drop(columns=['odometer'], inplace=True)
+    # Display the count of values in each bin
+print(vehicles['odometer_range'].value_counts())
+
+# df['odometer_range'] = df['odometer_range'].astype('category')
+
+
+
+
+# Remove motercycles
+#harley d   
+#kawasaki
