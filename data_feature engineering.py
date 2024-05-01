@@ -75,35 +75,8 @@ train_vehicles, test_vehicles = train_test_split(vehicles_nona, test_size=0.3, s
 test_vehicles = test_vehicles.drop(columns=['price_bin'], inplace=True)
 train_vehicles = train_vehicles.drop(columns=['price_bin'], inplace=True)
 
-####### Remove near zero variance #######
-# Function to calculate near zero variance
-def near_zero_variance(train_vehicles, threshold_freq=0.95, threshold_unique=0.01):
-    # Threshold_freq: if the most common value's frequency divided by the second most common value's frequency is greater than threshold, flag it.
-    # Threshold_unique: if the number of unique values divided by the total number of samples is less than threshold, flag it.
-    n = len(train_vehicles)
-    var_info = {}
-    for col in data.columns:
-        # Count frequencies of each value in the column
-        freqs = data[col].value_counts()
-        # Number of unique values
-        num_unique = freqs.size
-        # Proportion of the most common value
-        max_freq = freqs.max() / n
-        # Ratio of frequencies of most common value to second most common value (if possible)
-        if num_unique > 1:
-            second_most_freq = freqs.iloc[1]
-        else:
-            second_most_freq = freqs.iloc[0]  # if only one value exists, use its own frequency
-        
-        # Check the conditions for near zero variance
-        if (max_freq > threshold_freq) and ((num_unique / n) < threshold_unique):
-            var_info[col] = (num_unique, max_freq, freqs.iloc[0]/second_most_freq)
-    
-    return var_info
 
-# Calculate near zero variance for each column
-nzv_columns = near_zero_variance(data)
-nzv_columns
+
 
 
 ####### Lumping #######
@@ -129,6 +102,19 @@ def manual_lump(series):
 vehicles['manufacturer'] = manual_lump(vehicles['manufacturer'])
 
 # ONE HOT ENCODING
-# Remove motercycles
-#harley d   
-#kawasaki
+
+
+
+
+
+
+
+####### Remove near zero variance #######
+from sklearn.feature_selection import VarianceThreshold
+# Assuming vehicles is your dataset
+selector = VarianceThreshold()
+# Fit the selector to your data and transform it
+vehicles_selected = selector.fit_transform(vehicles_nona)
+# vehicles_selected will contain only the features with non-zero variance
+
+vehicles.to_csv('Data/vehicles_nona.csv', index=False)
