@@ -45,17 +45,17 @@ vehicles.dtypes
 
 ###### Plot the percentage of missing values in each column ######
 import matplotlib.pyplot as plt
-#import seaborn as sns
+import seaborn as sns
 # Calculate the percentage of missing values for each column
-#missing_data = vehicles.isnull().mean() * 100
+missing_data = vehicles.isnull().mean() * 100
 # Create a bar plot to visualize the percentage of missing data by column
-#plt.figure(figsize=(10, 6))
-#sns.barplot(x=missing_data.values, y=missing_data.index, palette='viridis')
-#plt.title('Percentage of Missing Data by Column')
-#plt.xlabel('Percentage of Missing Values')
-#plt.ylabel('Columns')
-#plt.grid(True, linestyle='--', alpha=0.6)
-#plt.show()
+plt.figure(figsize=(10, 6))
+sns.barplot(x=missing_data.values, y=missing_data.index, palette='viridis')
+plt.title('Percentage of Missing Data by Column')
+plt.xlabel('Percentage of Missing Values')
+plt.ylabel('Columns')
+plt.grid(True, linestyle='--', alpha=0.6)
+plt.show()
 
 # Drop NA
 vehicles_nona = vehicles.dropna() # dropping all remaining missings
@@ -148,4 +148,4 @@ train_vehicles = pd.DataFrame(train_vehicles_selected, columns=train_vehicles.co
 
 
 ####### Saving as a new csv file #######
-vehicles.to_csv('Data/train_vehicles_models.csv', index=False)
+train_vehicles.to_csv('Data/train_vehicles_models.csv', index=False)
