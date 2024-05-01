@@ -88,3 +88,15 @@ rmse = np.sqrt(mean_squared_error(y_test, predictions))
 print(f"Root Mean Squared Error: {rmse}") # 4688.806060242256
 
 ################ Graditio Tree ###################
+
+
+
+############### RandomForest ############### 
+from sklearn.ensemble import RandomForestClassifier
+clf = RandomForestClassifier(n_estimators=15)
+clf = clf.fit(X_train, y_train)
+predictions = clf.predict(X_test)
+rmse = np.sqrt(mean_squared_error(y_test, predictions))
+print(f"Root Mean Squared Error: {rmse}") 
+# n=10: 6080.714677263028
+# n=15: 5603.594256935747
