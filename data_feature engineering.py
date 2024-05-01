@@ -10,7 +10,6 @@ vehicles.dtypes # Display the data types of each column
 vehicles = vehicles[vehicles['condition'] != 'salvage'] # Remove rows containing 'salvage' in the 'condition' variable
 vehicles = vehicles[~vehicles['manufacturer'].isin(['harley-davidson', 'kawasaki'])] # removing motorcycle brands
 
-
 # Creating the years_old variable
 vehicles['year'] = vehicles['year'].astype('Int64') # Treat year as numeric to be able to substract
 vehicles['years_old'] = 2021 - vehicles['year']
@@ -28,7 +27,6 @@ vehicles['years_old'] = vehicles['years_old'].astype('category') # Treat years_o
 vehicles['odometer'] = vehicles['odometer'].astype('float64') # Treat years_old as category
 vehicles = vehicles[vehicles['odometer'] < 300000]
 
-
 ##### Creating new variables #####
 # Creating Ranges for 'odometer'
     # Define the ranges for the bins
@@ -42,79 +40,112 @@ vehicles.drop(columns=['odometer'], inplace=True)
     # Display the count of values in each bin
 print(vehicles['odometer_range'].value_counts())
 vehicles['odometer_range'] = vehicles['odometer_range'].astype('category')
+vehicles.dtypes
+
 
 ###### Plot the percentage of missing values in each column ######
 import matplotlib.pyplot as plt
-import seaborn as sns
+#import seaborn as sns
 # Calculate the percentage of missing values for each column
-missing_data = vehicles.isnull().mean() * 100
+#missing_data = vehicles.isnull().mean() * 100
 # Create a bar plot to visualize the percentage of missing data by column
-plt.figure(figsize=(10, 6))
-sns.barplot(x=missing_data.values, y=missing_data.index, palette='viridis')
-plt.title('Percentage of Missing Data by Column')
-plt.xlabel('Percentage of Missing Values')
-plt.ylabel('Columns')
-plt.grid(True, linestyle='--', alpha=0.6)
-plt.show()
+#plt.figure(figsize=(10, 6))
+#sns.barplot(x=missing_data.values, y=missing_data.index, palette='viridis')
+#plt.title('Percentage of Missing Data by Column')
+#plt.xlabel('Percentage of Missing Values')
+#plt.ylabel('Columns')
+#plt.grid(True, linestyle='--', alpha=0.6)
+#plt.show()
 
+# Drop NA
 vehicles_nona = vehicles.dropna() # dropping all remaining missings
+
+# Remove unused categories
+categorical_columns = ['manufacturer', 'condition', 'cylinders', 'fuel_type', 'transmission',
+                       'drive', 'car_type', 'paint_color', 'state', 'years_old', 'odometer_range']
+# Iterate through each categorical column and remove unused categories
+for col in categorical_columns:
+    vehicles_nona[col] = vehicles_nona[col].cat.remove_unused_categories()
 
 # Stratified sampling / split
 from sklearn.model_selection import train_test_split
-# Assuming 'vehicles' is your DataFrame and 'price' is the column you want to stratify by
-# You need to replace 'vehicles' and 'price' with the actual column names in your DataFrame
-# Set random seed for reproducibility
 import numpy as np
+# Assuming 'vehicles_nona' is your DataFrame and 'price' is the column you want to stratify by
+# Set random seed for reproducibility
 np.random.seed(123)
 # Binning prices into categories
 bins = pd.cut(vehicles_nona['price'], bins=50, labels=False)  # Adjust the number of bins as needed
 vehicles_nona['price_bin'] = bins
 # Splitting based on the price bins
 train_vehicles, test_vehicles = train_test_split(vehicles_nona, test_size=0.3, stratify=vehicles_nona['price_bin'])
-# slet price_bin fra test og train
-test_vehicles = test_vehicles.drop(columns=['price_bin'], inplace=True)
-train_vehicles = train_vehicles.drop(columns=['price_bin'], inplace=True)
+# Dropping 'price_bin' from both train and test sets
+test_vehicles.drop(columns=['price_bin'], inplace=True)
+train_vehicles.drop(columns=['price_bin'], inplace=True)
+# Now, let's check the data types of the columns in the training set
+print(train_vehicles.dtypes)
 
 
 
+####### Lumping ####### (other)
+train_vehicles.dtypes
+
+# Manufacturer lumping
+mf = train_vehicles['manufacturer'].value_counts()
+train_vehicles['manufacturer'] = train_vehicles['manufacturer'].apply(lambda s: s if str(s) in mf[:20] else 'others')
+train_vehicles['manufacturer'].value_counts()
+train_vehicles['manufacturer'] = train_vehicles['manufacturer'].astype('category')
+
+# Condition lumping (SHOULDNT BE DONE)
+train_vehicles['condition'].value_counts()
+
+# Cylinders lumping (SHOULDNT BE DONE)
+train_vehicles['cylinders'].value_counts()
+
+# Fuel type lumping (SHOULDNT BE DONE)
+train_vehicles['fuel_type'].value_counts()
+
+# Transmission lumping (SHOULDNT BE DONE)
+train_vehicles['transmission'].value_counts()
+
+# Drive lumping (SHOULDNT BE DONE)
+train_vehicles['drive'].value_counts()
+
+# Car type lumping (already a other)
+train_vehicles['car_type'].value_counts()
+
+# Paint color lumping
+paint_color = train_vehicles['paint_color'].value_counts()
+train_vehicles['paint_color'] = train_vehicles['paint_color'].apply(lambda s: s if str(s) in paint_color[:9] else 'others')
+train_vehicles['paint_color'].value_counts()
+train_vehicles['paint_color'] = train_vehicles['paint_color'].astype('category')
+
+# State lumping (SHOULDNT BE DONE)
+train_vehicles['state'].value_counts()
+
+# Years old lumping (SHOULDNT BE DONE)
+train_vehicles['years_old'].value_counts()
 
 
-####### Lumping #######
-print(vehicles['manufacturer'].value_counts())
-
-# Example of how to perform lumping based on a threshold
-# Define a Function to Lump Categories
-def lump_categories(series, threshold=100): # set threshold
-    counts = series.value_counts()
-    return series.apply(lambda x: x if counts[x] > threshold else 'Other')
-# Using the threshold-based lumping
-vehicles['manufacturer'] = lump_categories(vehicles['manufacturer'], threshold=3)
-
-# Example of how to perform lumping based on a manual specification
-def manual_lump(series):
-    mapping = {
-        'fiat': 'other', # insert all categories of the variable and manually specify new category
-        'mini': 'other',
-        'mitsubishi': 'other',
-        'volvo': 'other'
-    }
-    return series.map(mapping)
-vehicles['manufacturer'] = manual_lump(vehicles['manufacturer'])
-
-# ONE HOT ENCODING
+###### ONE HOT ENCODING ######
+train_vehicles.dtypes
+# Select coloumns
+categorical_columns = ['manufacturer', 'condition', 'cylinders', 'fuel_type', 'transmission', 'drive', 'car_type', 'paint_color', 'state', 'years_old', 'odometer_range']
+# Apply one-hot encoding
+train_vehicles = pd.get_dummies(train_vehicles, columns=categorical_columns, dtype=int)
+# Optionally, drop the original categorical columns if you want only the encoded data
+# data_encoded = data_encoded.drop(categorical_columns, axis=1)
+print(train_vehicles.head())
+train_vehicles.dtypes
 
 
-
-
-
-
-
-####### Remove near zero variance #######
+###### Removing zero and near zero variance #####
 from sklearn.feature_selection import VarianceThreshold
-# Assuming vehicles is your dataset
-selector = VarianceThreshold()
-# Fit the selector to your data and transform it
-vehicles_selected = selector.fit_transform(vehicles_nona)
-# vehicles_selected will contain only the features with non-zero variance
+selector = VarianceThreshold(threshold=0.01)  # Adjust threshold as needed
+train_vehicles_selected = selector.fit_transform(train_vehicles)
+# vehicles_selected will contain only the features with variance above the threshold
+# Creating df
+train_vehicles = pd.DataFrame(train_vehicles_selected, columns=train_vehicles.columns[selector.get_support()])
 
-vehicles.to_csv('Data/vehicles_nona.csv', index=False)
+
+####### Saving as a new csv file #######
+vehicles.to_csv('Data/train_vehicles_models.csv', index=False)
