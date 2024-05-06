@@ -159,13 +159,15 @@ print(f"ElasticNet Regression Root Mean Squared Error: {rmse_elastic_net}") # 65
 
 ################ Random Forest Regression ###################
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-random_forest = RandomForestRegressor(n_estimators=200, random_state=42)
+random_forest = RandomForestRegressor(n_estimators=5000, random_state=42)
 random_forest.fit(X_train, y_train)
 predictions_random_forest = random_forest.predict(X_test)
 rmse_random_forest = np.sqrt(mean_squared_error(y_test, predictions_random_forest))
-print(f"Random Forest Regression Root Mean Squared Error: {rmse_random_forest}") # 3673.1164056550765
+print(f"Random Forest Regression Root Mean Squared Error: {rmse_random_forest}") 
+# 3673.1164056550765 med 200 n_estimators
+# 3668.267011017643 med 500 n_estimators
 
-################ Random Forest Regression med hypergrid ################### # tager mega lang tid at køre. Har ikke kørt den endnu
+################ Random Forest Regression med hypergrid ################### # tager 1 time at køre
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import mean_squared_error
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
@@ -180,10 +182,11 @@ grid_search_rf.fit(X_train, y_train)
 
 # Print the best parameters and best score
 print("Best parameters for Random Forest:", grid_search_rf.best_params_)
+        # max_depth': None, 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 200
 
 predictions_grid_search_rf = grid_search_rf.predict(X_test)
-rmse_rgrid_search_rf = np.sqrt(mean_squared_error(y_test, predictions_grid_search_rf))
-print(f"Random Forest Regression Root Mean Squared Error: {rmse_grid_search_rf}") 
+rmse_grid_search_rf = np.sqrt(mean_squared_error(y_test, predictions_grid_search_rf))
+print(f"Random Forest Regression Root Mean Squared Error: {rmse_grid_search_rf}") # 3673.1164056550765
 
 ################ Gradient Boosting Regression ################### # tager lang tid
 from sklearn.model_selection import GridSearchCV
