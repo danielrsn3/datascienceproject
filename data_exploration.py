@@ -8,16 +8,10 @@ pd.set_option('display.float_format', lambda x: '%.3f' % x)
 # Load the data
 vehicles = pd.read_csv('Data/vehicles_clean.csv') # Uploading the data
 vehicles.dtypes # Display the data types of each column
-from data_preprocessing import apply_data_types # Function from preprocessing
-apply_data_types(vehicles)
-vehicles.dtypes # Display the data types of each column
-vehicles['year'] = vehicles['year'].astype('Int64') # Treat year as numeric to get summary statistics
-vehicles.describe(include='all') # Get summary statistics of all variables
-vehicles.dtypes # Display the data types of each column
 
 ###### Summary statistics ######
 vehicles.describe() # for numerical variable
-vehicles.select_dtypes(include=['category']).describe() # for categorical variables
+vehicles.select_dtypes(include=['object']).describe() # for categorical variables
 
 ###### Visualizations ######
 # Histogram of the 'price' column with prices up to $100,000
@@ -46,7 +40,7 @@ plt.show()
 plt.figure(figsize=(10, 6))
 plt.boxplot(vehicles['price'], vert=False, flierprops=dict(marker='o', color='red', alpha=0.5))
 plt.xlabel('Price')
-plt.title('Boxplot of Vehicle Prices with Outlier Detection')
+plt.title('Boxplot of Vehicle Prices')
 plt.grid(True)
 plt.xlim(0, 100000)  # Limiting the x-axis to enhance detail around the typical price range
 plt.show()
@@ -65,7 +59,8 @@ plt.ylabel('Average Price')
 plt.xticks(rotation=90)  # Rotating the manufacturer names for better visibility
 plt.grid(axis='y')
 plt.show()
-    # Remove motercycles / Multiple manufactures with very high average price
+    # Remove motorcycles 
+    # Multiple manufacturers with very high average price
 
 
 filtered_data = vehicles[(vehicles['price'] <= 100000) & (vehicles['year'].notna())]
@@ -75,18 +70,18 @@ import numpy as np
 
 def cramers_v(x, y):
     """Calculate Cramer's V statistic for two categorical series."""
-    contingency_table = pd.crosstab(x, y)
-    chi2, _, _, _ = chi2_contingency(contingency_table)
+    contingency_table = pd.crosstab(x, y) # Creating a contingency table
+    chi2, _, _, _ = chi2_contingency(contingency_table) # Perform the Chi-Squared Test
     n = contingency_table.sum().sum()
-    phi2 = chi2 / n
+    phi2 = chi2 / n # Calculate Phi Squared 
     r, k = contingency_table.shape
-    phi2corr = max(0, phi2 - ((k-1)*(r-1))/(n-1))
-    rcorr = r - ((r-1)**2)/(n-1)
-    kcorr = k - ((k-1)**2)/(n-1)
-    return np.sqrt(phi2corr / min((kcorr-1), (rcorr-1)))
+    phi2corr = max(0, phi2 - ((k-1)*(r-1))/(n-1)) # Correct Phi Squared for Bias
+    rcorr = r - ((r-1)**2)/(n-1) # Calculate Corrected Row Totals
+    kcorr = k - ((k-1)**2)/(n-1) # Calculate Corrected Column Totals
+    return np.sqrt(phi2corr / min((kcorr-1), (rcorr-1))) # Compute Cramer's V
 
 # Identify categorical columns
-categorical_columns = vehicles.select_dtypes(include=['category']).columns
+categorical_columns = vehicles.select_dtypes(include=['object']).columns
 
 # Compute Cramer's V matrix
 cramers_v_matrix = pd.DataFrame(index=categorical_columns, columns=categorical_columns)
