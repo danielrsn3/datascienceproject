@@ -212,3 +212,25 @@ print("Best parameters for Gradient Boosting:", grid_search_gb.best_params_)
 predictions_grid_search_gb = grid_search_gb.predict(X_test)
 rmse_grid_search_gb = np.sqrt(mean_squared_error(y_test, predictions_grid_search_gb))
 print(f"Gradient Boosting Regression Root Mean Squared Error: {rmse_grid_search_gb}") # 4104.193407930705
+
+
+###### PLOT WITH RESULTS ######
+
+import matplotlib.pyplot as plt
+
+# Sort the DataFrame by RMSE in descending order
+results_df_sorted = results_df.sort_values(by='RMSE', ascending=False)
+
+# Set the style of the plot
+plt.style.use('seaborn-darkgrid')
+
+# Create a bar plot
+plt.figure(figsize=(10, 6))
+plt.barh(results_df_sorted['Model'], results_df_sorted['RMSE'], color='skyblue')
+plt.xlabel('Root Mean Squared Error (RMSE)')
+plt.ylabel('Model')
+plt.title('Comparison of RMSE for Different Models')
+plt.tight_layout()
+
+# Show the plot
+plt.show()
