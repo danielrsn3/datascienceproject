@@ -4,8 +4,8 @@ vehicles = pd.read_csv('Data/vehicles_fe_models.csv')
 
 ############### Split #######################
 # Stratified sampling / split
-from sklearn.model_selection import train_test_split
 import numpy as np
+from sklearn.model_selection import train_test_split
 # Assuming 'vehicles_nona' is your DataFrame and 'price' is the column you want to stratify by
 # Set random seed for reproducibility
 np.random.seed(123)
@@ -28,34 +28,10 @@ X_test = test_vehicles.drop('price', axis=1)
 y_test = test_vehicles['price']
 
 
-############### Gradient Boosting Regression ###############
-
-from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.metrics import mean_squared_error
-
-# Initialize the Gradient Boosting regressor
-gbr = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42)
-
-# Train the model
-gbr.fit(X_train, y_train)
-
-# Predict on the test set
-y_pred = gbr.predict(X_test)
-
-# Calculate the root mean squared error (RMSE)
-rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-print("Root Mean Squared Error:", rmse) # 5625.007709969297
-
-# Optional: Display feature importances
-feature_importances = pd.DataFrame(gbr.feature_importances_,
-                                   index = X_train.columns,
-                                   columns=['importance']).sort_values('importance', ascending=False)
-print(feature_importances)
-
 ################ Linear Regression ###################
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 import numpy as np
 
 # Create a Linear Regression model
@@ -76,50 +52,80 @@ from sklearn import svm
 svm = svm.SVR()
 svm.fit(X_train, y_train)
 predictions_svm = svm.predict(X_test)
+
 rmse_svm = np.sqrt(mean_squared_error(y_test, predictions_svm))
+mae_svm = mean_absolute_error(y_test, predictions_svm)
+mse_svm = mean_squared_error(y_test, predictions_svm)
+
 print(f"Root Mean Squared Error: {rmse_svm}") # 12086.086598954298
+print(f"Mean Absolute Error: {mae_svm}")
+print(f"Mean Squared Error: {mse_svm}")
 
 ################ Decision Tree ###################
 from sklearn import tree
 clf = tree.DecisionTreeRegressor()
 clf = clf.fit(X_train, y_train)
 predictions = clf.predict(X_test)
-rmse = np.sqrt(mean_squared_error(y_test, predictions))
-print(f"Root Mean Squared Error: {rmse}") # 4688.806060242256
 
+rmse = np.sqrt(mean_squared_error(y_test, predictions))
+mae = mean_absolute_error(y_test, predictions)
+mse = mean_squared_error(y_test, predictions)
+
+print(f"Root Mean Squared Error: {rmse}") # 4688.806060242256
+print(f"Mean Absolute Error: {mae}")
+print(f"Mean Squared Error: {mse}")
 
 ################ Ridge regression ###################
 from sklearn import linear_model
 reg = linear_model.Ridge(alpha=.5)
 reg.fit(X_train, y_train)
 predictions_rid = reg.predict(X_test)
-rmse_rid = np.sqrt(mean_squared_error(y_test, predictions_rid))
-print(f"Root Mean Squared Error: {rmse_rid}") # 5366.365037459648
 
+rmse_rid = np.sqrt(mean_squared_error(y_test, predictions_rid))
+mae_rid = mean_absolute_error(y_test, predictions_rid)
+mse_rid = mean_squared_error(y_test, predictions_rid)
+
+print(f"Root Mean Squared Error: {rmse_rid}") # 5366.365037459648
+print(f"Mean Absolute Error: {mae_rid}") # 3842.056265424365
+print(f"Mean Squared Error: {mse_rid}") # 28797873.71526929
 
 ################ Bayesian Ridge regression ###################
 from sklearn import linear_model
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
 bay = linear_model.BayesianRidge()
 bay.fit(X_train, y_train)
 predictions_bay = bay.predict(X_test)
+
 rmse_bay = np.sqrt(mean_squared_error(y_test, predictions_bay))
+mae_bay = mean_absolute_error(y_test, predictions_bay)
+mse_bay = mean_squared_error(y_test, predictions_bay)
+
 print(f"Root Mean Squared Error: {rmse_bay}") # 5366.62250700759
+print(f"Mean Absolute Error: {mae_bay}")
+print(f"Mean Squared Error: {mse_bay}")
 
 
 ################ Lasso regression ###################
 from sklearn import linear_model
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
 las = linear_model.Lasso(alpha=0.1)
 las.fit(X_train, y_train)
 predictions_las = las.predict(X_test)
+
 rmse_las = np.sqrt(mean_squared_error(y_test, predictions_las))
+mae_las = mean_absolute_error(y_test, predictions_las)
+mse_las = mean_squared_error(y_test, predictions_las)
+
 print(f"Root Mean Squared Error: {rmse_las}") # 5366.601618098152
+print(f"Mean Absolute Error: {mae_las}")
+print(f"Mean Squared Error: {mse_las}")
 
 
 ################ KNN regression ###################
-import numpy as np
-from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsRegressor
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 # 3
 knn_regressor = KNeighborsRegressor(n_neighbors=3)
@@ -139,8 +145,14 @@ print(f"Root Mean Squared Error: {rmse_knn}") # 4940.608706349057
 knn_regressor = KNeighborsRegressor(n_neighbors=5)
 knn_regressor.fit(X_train, y_train)
 predictions_knn = knn_regressor.predict(X_test)
+
 rmse_knn = np.sqrt(mean_squared_error(y_test, predictions_knn))
+mae_knn = mean_absolute_error(y_test, predictions_knn)
+mse_knn = mean_squared_error(y_test, predictions_knn)
+
 print(f"Root Mean Squared Error: {rmse_knn}") # 4928.648101840205
+print(f"Mean Absolute Error: {mae_knn}")
+print(f"Mean Squared Error: {mse_knn}")
 
 # 6
 knn_regressor = KNeighborsRegressor(n_neighbors=6)
@@ -151,21 +163,36 @@ print(f"Root Mean Squared Error: {rmse_knn}") # 4935.306805828042
 
 ################ ElasticNet Regression ###################
 from sklearn.linear_model import ElasticNet
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
 elastic_net = ElasticNet(alpha=0.1, l1_ratio=0.5)
 elastic_net.fit(X_train, y_train)
 predictions_elastic_net = elastic_net.predict(X_test)
+
 rmse_elastic_net = np.sqrt(mean_squared_error(y_test, predictions_elastic_net))
-print(f"ElasticNet Regression Root Mean Squared Error: {rmse_elastic_net}") # 6586.208684130186
+mae_elastic_net = mean_absolute_error(y_test, predictions_elastic_net)
+mse_elastic_net = mean_squared_error(y_test, predictions_elastic_net)
+
+print(f"Root Mean Squared Error: {rmse_elastic_net}") # 6586.208684130186
+print(f"Mean Absolute Error: {mae_elastic_net}")
+print(f"Mean Squared Error: {mse_elastic_net}")
+
 
 ################ Random Forest Regression ###################
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-random_forest = RandomForestRegressor(n_estimators=5000, random_state=42)
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
+random_forest = RandomForestRegressor(n_estimators=500, random_state=42)
 random_forest.fit(X_train, y_train)
 predictions_random_forest = random_forest.predict(X_test)
+
 rmse_random_forest = np.sqrt(mean_squared_error(y_test, predictions_random_forest))
-print(f"Random Forest Regression Root Mean Squared Error: {rmse_random_forest}") 
-# 3673.1164056550765 med 200 n_estimators
-# 3668.267011017643 med 500 n_estimators
+mae_random_forest = mean_absolute_error(y_test, predictions_random_forest)
+mse_random_forest = mean_squared_error(y_test, predictions_random_forest)
+
+print(f"Root Mean Squared Error: {rmse_random_forest}") # 3673.1164056550765 med 200 n_estimators, # 3668.267011017643 med 500 n_estimators
+print(f"Mean Absolute Error: {mae_random_forest}")
+print(f"Mean Squared Error: {mse_random_forest}")
 
 ################ Random Forest Regression med hypergrid ################### # tager 1 time at køre
 from sklearn.model_selection import GridSearchCV
@@ -188,7 +215,38 @@ predictions_grid_search_rf = grid_search_rf.predict(X_test)
 rmse_grid_search_rf = np.sqrt(mean_squared_error(y_test, predictions_grid_search_rf))
 print(f"Random Forest Regression Root Mean Squared Error: {rmse_grid_search_rf}") # 3673.1164056550765
 
-################ Gradient Boosting Regression ################### # tager lang tid
+
+############### Gradient Boosting Regression ###############
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
+# Initialize the Gradient Boosting regressor
+gbr = GradientBoostingRegressor(n_estimators=1000, learning_rate=0.5, max_depth=5, random_state=42)
+gbr.fit(X_train, y_train) # Train the model
+y_pred = gbr.predict(X_test) # Predict on the test set
+
+# Calculate the evaluation metrics
+rmse = np.sqrt(mean_squared_error(y_test, y_pred)) # Calculate the root mean squared error (RMSE)
+mae = mean_absolute_error(y_test, y_pred) # Calculate the mean absolute error (MAE)
+mse = mean_squared_error(y_test, y_pred) # Calculate the mean squared error (MSE)
+
+print("Root Mean Squared Error:", rmse)
+# 5625.007709969297 (n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42)
+# 3834.3064543798773 (n_estimators=500, learning_rate=0.3, max_depth=5, random_state=42)
+# 3755.186035015425 (n_estimators=1000, learning_rate=0.5, max_depth=5, random_state=42)
+print("Mean Absolute Error:", mae)
+print("Mean Squared Error:", mse)
+
+
+
+# Display feature importances
+feature_importances = pd.DataFrame(gbr.feature_importances_,
+                                   index = X_train.columns,
+                                   columns=['importance']).sort_values('importance', ascending=False)
+print(feature_importances)
+
+
+################ Gradient Boosting Regression with hypergrid ################### # tager lang tid
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import GradientBoostingRegressor
 
@@ -233,4 +291,4 @@ plt.title('Comparison of RMSE for Different Models')
 plt.tight_layout()
 
 # Show the plot
-plt.show()# hvad med nu
+plt.show()
