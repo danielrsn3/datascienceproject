@@ -233,4 +233,4 @@ plt.title('Comparison of RMSE for Different Models')
 plt.tight_layout()
 
 # Show the plot
-plt.show()
+plt.show()# hvad med nu
