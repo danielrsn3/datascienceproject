@@ -40,8 +40,6 @@ vehicles.drop(columns=['odometer'], inplace=True)
 print(vehicles['odometer_range'].value_counts())
 vehicles['odometer_range'] = vehicles['odometer_range'].astype('category')
 
-
-
 # Convert each column to correct data type
 vehicles.dtypes # Checking data types
 vehicles['manufacturer'] = vehicles['manufacturer'].astype('category')
