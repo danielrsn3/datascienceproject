@@ -7,7 +7,7 @@ from flask import Flask, request, jsonify
 from datetime import datetime
 
 # Load and prepare data
-vehicles = pd.read_csv('Data/vehicles_fe_models.csv')
+vehicles = pd.read_csv('Data/vehicles_FeatureEngineered.csv')
 
 # Stratified sampling based on price
 np.random.seed(123)

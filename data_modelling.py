@@ -1,10 +1,9 @@
 ############### Import 
 import pandas as pd
-vehicles = pd.read_csv('Data/vehicles_fe_models.csv')
+vehicles = pd.read_csv('Data/vehicles_FeatureEngineered.csv')
 
 ############### Split #######################
 # Stratified sampling / split
-import numpy as np
 from sklearn.model_selection import train_test_split
 # Assuming 'vehicles_nona' is your DataFrame and 'price' is the column you want to stratify by
 # Set random seed for reproducibility

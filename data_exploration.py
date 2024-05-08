@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 # Load the data
-vehicles = pd.read_csv('Data/vehicles_clean.csv') # Uploading the data generated in the preprocessing step
+vehicles = pd.read_csv('Data/vehicles_Preprocessed.csv') # Uploading the data generated in the preprocessing step
 vehicles.dtypes # Display the data types of each column
 
 # Summary statistics
@@ -63,7 +63,7 @@ plt.show()
     # Multiple manufacturers with very high average price
 
 
-filtered_data = vehicles[(vehicles['price'] <= 100000) & (vehicles['year'].notna())]
+filtered_data = vehicles[(vehicles['price'] <= 100000) & (vehicles['years_old'].notna())]
 # Correlation between categorical features
 from scipy.stats import chi2_contingency
 import numpy as np
