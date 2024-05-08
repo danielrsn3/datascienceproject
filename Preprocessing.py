@@ -1,6 +1,7 @@
 ####################################### PREPROCESSING #######################################
+
 # GENERAL OPTIONS
-import pandas as pd # Import pandas
+import pandas as pd
 pd.set_option('display.max_columns', None) # Allow to see all columns when viewing data
 pd.set_option('display.float_format', lambda x: '%.3f' % x) # Prevent scientific numbers
 
@@ -41,21 +42,20 @@ vehicles['year'] = vehicles['year'].astype('Int64') # Treat year as numeric to b
 vehicles['years_old'] = 2021 - vehicles['year']
 vehicles.drop(columns=['year'], inplace=True) # deleting the original year column
 
-
-# Setting max and min ranges for our data
-    # Removing rows where price is below 1000
+# Removing rows where price is below 1000 and above 57300
 vehicles = vehicles[vehicles['price'] > 1000] # To exclude damaged cars and listings with no intention of selling to that price
 vehicles = vehicles[vehicles['price'] < 57300] # To exclude observations where the price is above 57300 (our upper whisker from the boxplot)
 print((vehicles['price'].min(), vehicles['price'].max())) # View price range
-vehicles = vehicles[vehicles['years_old'] <= 30] # To exclude cars older than 1980 
-vehicles['years_old'] = vehicles['years_old'].astype('category') # Treat years_old as category
 
-    # Removing rows where odometer is above 300000
-vehicles['odometer'] = vehicles['odometer'].astype('float64') # Treat years_old as category
+# Exclude cars older than 1980
+vehicles = vehicles[vehicles['years_old'] <= 30]
+vehicles['years_old'] = vehicles['years_old'].astype('object')
+
+# Removing rows where odometer is above 300000
+vehicles['odometer'] = vehicles['odometer'].astype('float64') # Treat years_old as float64
 vehicles = vehicles[vehicles['odometer'] < 300000]
 
-# Creating new variables
-    # Creating Ranges for 'odometer'
+# Creating Ranges for 'odometer'
     # Define the ranges for the bins
 bins = [0, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000, 160000, 170000, 180000, 190000, 200000, float('inf')]
     # Define labels for the bins
@@ -67,9 +67,8 @@ vehicles.drop(columns=['odometer'], inplace=True)
     # Display the count of values in each bin
 print(vehicles['odometer_range'].value_counts())
 vehicles['odometer_range'] = vehicles['odometer_range'].astype('category')
-vehicles.dtypes
 
-###### Plot the percentage of missing values in each column ######
+# Plot the percentage of missing values in each column
 import matplotlib.pyplot as plt
 import seaborn as sns
 # Calculate the percentage of missing values for each column

@@ -9,11 +9,13 @@ pd.set_option('display.float_format', lambda x: '%.3f' % x)
 vehicles = pd.read_csv('Data/vehicles_Preprocessed.csv') # Uploading the data generated in the preprocessing step
 vehicles.dtypes # Display the data types of each column
 
+# Converting years_old into an object for later use
+vehicles['years_old'] = vehicles['years_old'].astype('object')
+
 # Summary statistics
-vehicles.describe() # for numerical variable
+vehicles.describe() # for numerical variables (only 'price')
 vehicles.select_dtypes(include=['object']).describe() # for categorical variables
 
-###### Visualizations ######
 # Histogram of the 'price' column with prices up to $100,000
 plt.figure(figsize=(12, 6))
 plt.hist(vehicles['price'][vehicles['price'] <= 100000], bins=50, color='blue', edgecolor='black')
@@ -24,14 +26,14 @@ plt.grid(True)
 plt.show()
 
 # HEXBIN
-# Filter the data to ensure both 'year' and 'price' have valid entries and price is up to $100,000
-filtered_data = vehicles[(vehicles['price'] <= 100000) & (vehicles['year'].notna())]
+# Filter the data to ensure both 'years_olds' and 'price' have valid entries and price is up to $100,000
+filtered_data = vehicles[(vehicles['price'] <= 100000) & (vehicles['years_old'].notna())]
 # Hexbin plot with filtered data
 plt.figure(figsize=(12, 8))
-plt.hexbin(filtered_data['year'], filtered_data['price'], gridsize=50, cmap='Greens', bins='log')
+plt.hexbin(filtered_data['years_old'], filtered_data['price'], gridsize=50, cmap='Greens', bins='log')
 plt.colorbar(label='Log10(N)')
-plt.title('Hexbin Plot of Vehicle Price vs. Year (Prices up to $100,000)')
-plt.xlabel('Year')
+plt.title('Hexbin Plot of Vehicle Price vs. Years_old (Prices up to $100,000)')
+plt.xlabel('Years_old')
 plt.ylabel('Price')
 plt.grid(True)
 plt.show()

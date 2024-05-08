@@ -1,5 +1,7 @@
-############### Import 
+####################################### MODELLING #######################################
 import pandas as pd
+
+# Import feature engineered data
 vehicles = pd.read_csv('Data/vehicles_FeatureEngineered.csv')
 
 ############### Split #######################
