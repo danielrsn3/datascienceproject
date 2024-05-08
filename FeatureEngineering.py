@@ -23,6 +23,9 @@ vehicles['years_old'] = vehicles['years_old'].astype('object')
 # Removing rows where odometer is above 300000
 vehicles['odometer'] = vehicles['odometer'].astype('float64') # Treat years_old as float64
 vehicles = vehicles[vehicles['odometer'] < 300000]
+# Modifying observations
+vehicles = vehicles[vehicles['condition'] != 'salvage'] # Remove rows containing 'salvage' in the 'condition' variable
+vehicles = vehicles[~vehicles['manufacturer'].isin(['harley-davidson', 'kawasaki'])] # removing motorcycle brands
 # Creating Ranges for 'odometer'
     # Define the ranges for the bins
 bins = [0, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000, 160000, 170000, 180000, 190000, 200000, float('inf')]

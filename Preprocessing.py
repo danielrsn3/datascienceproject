@@ -33,10 +33,6 @@ vehicles['cylinders'] = vehicles['cylinders'].str.replace(' cylinders', '').str.
 vehicles.rename(columns={'fuel': 'fuel_type'}, inplace=True)
 vehicles.rename(columns={'type': 'car_type'}, inplace=True)
 
-# Modifying observations
-vehicles = vehicles[vehicles['condition'] != 'salvage'] # Remove rows containing 'salvage' in the 'condition' variable
-vehicles = vehicles[~vehicles['manufacturer'].isin(['harley-davidson', 'kawasaki'])] # removing motorcycle brands
-
 # Plot the percentage of missing values in each column
 import matplotlib.pyplot as plt
 import seaborn as sns

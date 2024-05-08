@@ -9,11 +9,8 @@ pd.set_option('display.float_format', lambda x: '%.3f' % x)
 vehicles = pd.read_csv('Data/vehicles_Preprocessed.csv') # Uploading the data generated in the preprocessing step
 vehicles.dtypes # Display the data types of each column
 
-# Converting years_old into an object for later use
-vehicles['years_old'] = vehicles['years_old'].astype('object')
-
 # Summary statistics
-vehicles.describe() # for numerical variables (only 'price')
+vehicles.describe() # for numerical variables
 vehicles.select_dtypes(include=['object']).describe() # for categorical variables
 
 # Histogram of the 'price' column with prices up to $100,000
@@ -26,14 +23,14 @@ plt.grid(True)
 plt.show()
 
 # HEXBIN
-# Filter the data to ensure both 'years_olds' and 'price' have valid entries and price is up to $100,000
-filtered_data = vehicles[(vehicles['price'] <= 100000) & (vehicles['years_old'].notna())]
+# Filter the data to ensure both 'year' and 'price' have valid entries and price is up to $100,000
+filtered_data = vehicles[(vehicles['price'] <= 100000) & (vehicles['year'].notna())]
 # Hexbin plot with filtered data
 plt.figure(figsize=(12, 8))
-plt.hexbin(filtered_data['years_old'], filtered_data['price'], gridsize=50, cmap='Greens', bins='log')
+plt.hexbin(filtered_data['year'], filtered_data['price'], gridsize=50, cmap='Greens', bins='log')
 plt.colorbar(label='Log10(N)')
-plt.title('Hexbin Plot of Vehicle Price vs. Years_old (Prices up to $100,000)')
-plt.xlabel('Years_old')
+plt.title('Hexbin Plot of Vehicle Price vs. Year (Prices up to $100,000)')
+plt.xlabel('Year')
 plt.ylabel('Price')
 plt.grid(True)
 plt.show()
@@ -47,7 +44,7 @@ plt.grid(True)
 plt.xlim(0, 100000)  # Limiting the x-axis to enhance detail around the typical price range
 plt.show()
     # Comments:
-    # Observations above 57300 should be removed.
+    # Observations above 57300 should be removed. # NEEDS TO BE EDITED!
 
 # Grouping data by manufacturer and calculating the average price per manufacturer
 manufacturer_price_avg = vehicles.groupby('manufacturer')['price'].mean().sort_values(ascending=False)
@@ -65,7 +62,7 @@ plt.show()
     # Multiple manufacturers with very high average price
 
 
-filtered_data = vehicles[(vehicles['price'] <= 100000) & (vehicles['years_old'].notna())]
+filtered_data = vehicles[(vehicles['price'] <= 100000) & (vehicles['year'].notna())]
 # Correlation between categorical features
 from scipy.stats import chi2_contingency
 import numpy as np
