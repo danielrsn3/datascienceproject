@@ -9,7 +9,7 @@ pd.set_option('display.float_format', lambda x: '%.3f' % x)
 vehicles = pd.read_csv('Data/vehicles_clean.csv') # Uploading the data generated in the preprocessing step
 vehicles.dtypes # Display the data types of each column
 
-###### Summary statistics ######
+# Summary statistics
 vehicles.describe() # for numerical variable
 vehicles.select_dtypes(include=['object']).describe() # for categorical variables
 
@@ -46,8 +46,6 @@ plt.xlim(0, 100000)  # Limiting the x-axis to enhance detail around the typical 
 plt.show()
     # Comments:
     # Observations above 57300 should be removed.
-
-
 
 # Grouping data by manufacturer and calculating the average price per manufacturer
 manufacturer_price_avg = vehicles.groupby('manufacturer')['price'].mean().sort_values(ascending=False)
@@ -101,6 +99,7 @@ for i, col1 in enumerate(categorical_columns):
         cramers_v_matrix.loc[col2, col1] = cramers_v_value  # Symmetric value
 
 cramers_v_matrix
+
 
 ##### HEATMAP ######
 import seaborn as sns

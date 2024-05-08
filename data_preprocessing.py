@@ -14,7 +14,6 @@ vehicles.dtypes # Display the data types of each column
 
 ####################################### PREPROCESSING #######################################
 ####### Remove excessive variables #######
-# Removing the columns
 vehicles.drop(columns=['id'], inplace=True) # ID it not required
 vehicles.drop(columns=['county'], inplace=True) # 100 % missing / coloum left in by mistake
 vehicles.drop(columns=['VIN'], inplace=True) # Useless
@@ -26,14 +25,12 @@ vehicles.drop(columns=['size'], inplace=True) # Too Many missings / Craigslist s
 vehicles.drop(columns=['model'], inplace=True) # Poor data quality
 vehicles.drop(columns=['title_status'], inplace=True) # Poor data quality
 
-# Removing "cylinders" in all the rows from the column cylinder, we just need the number.
+# Removing the wording of "cylinders" in all the rows from the column cylinder, we just need the number of cylinders.
 vehicles['cylinders']
 vehicles['cylinders'] = vehicles['cylinders'].str.replace(' cylinders', '').str.replace('cylinders', '') 
 
 ######## Renaming variables #######
-# fuel
 vehicles.rename(columns={'fuel': 'fuel_type'}, inplace=True)
-# type
 vehicles.rename(columns={'type': 'car_type'}, inplace=True)
 
 ####### Saving as a new csv file #######
