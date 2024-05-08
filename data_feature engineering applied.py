@@ -113,11 +113,9 @@ vehicles_nona.dtypes
 categorical_columns = ['manufacturer', 'condition', 'cylinders', 'fuel_type', 'transmission', 'drive', 'car_type', 'paint_color', 'state', 'years_old', 'odometer_range']
 # Apply one-hot encoding
 vehicles_nona = pd.get_dummies(vehicles_nona, columns=categorical_columns, dtype=int)
-# Optionally, drop the original categorical columns if you want only the encoded data
-# data_encoded = data_encoded.drop(categorical_columns, axis=1)
+# Viewing it agian
 print(vehicles_nona.head())
 vehicles_nona.dtypes
-
 
 ###### Removing zero and near zero variance #####
 from sklearn.feature_selection import VarianceThreshold

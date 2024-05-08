@@ -1,4 +1,4 @@
-###### LOOKING AT THE ENTIRE DATA SET IN ORDER TO MAKE DECISIONS ON FEATURE ENGINEERING ######
+####################################### Feature Engineering #######################################
 import pandas as pd
 vehicles = pd.read_csv('Data/vehicles_clean.csv') # Uploading preprossed data
 vehicles.dtypes # Display the data types of each column
