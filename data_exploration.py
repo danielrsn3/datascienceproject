@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 pd.set_option('display.float_format', lambda x: '%.3f' % x)
 
 # Load the data
-vehicles = pd.read_csv('Data/vehicles_clean.csv') # Uploading the data
+vehicles = pd.read_csv('Data/vehicles_clean.csv') # Uploading the data generated in the preprocessing step
 vehicles.dtypes # Display the data types of each column
 
 ###### Summary statistics ######
@@ -44,7 +44,8 @@ plt.title('Boxplot of Vehicle Prices')
 plt.grid(True)
 plt.xlim(0, 100000)  # Limiting the x-axis to enhance detail around the typical price range
 plt.show()
-# Observations above 57300 should be removed.
+    # Comments:
+    # Observations above 57300 should be removed.
 
 
 
@@ -59,6 +60,7 @@ plt.ylabel('Average Price')
 plt.xticks(rotation=90)  # Rotating the manufacturer names for better visibility
 plt.grid(axis='y')
 plt.show()
+    # Comments:
     # Remove motorcycles 
     # Multiple manufacturers with very high average price
 
@@ -104,7 +106,6 @@ cramers_v_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Assuming 'cramers_v_matrix' is already calculated and available
 # Ensure the data is in float format for plotting
 cramers_v_matrix = cramers_v_matrix.astype(float)
 
@@ -120,9 +121,3 @@ heatmap = sns.heatmap(
 )
 plt.title('Heatmap of Cramer\'s V Statistics Between Categorical Features')  # Title of the plot
 plt.show()  # Display the plot
-
-
-
-
-
-

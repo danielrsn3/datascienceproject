@@ -1,10 +1,12 @@
-####### UPLOADING DATA #######
+###### GENERAL OPTIONS ######
 import pandas as pd # Import pandas
 pd.set_option('display.max_columns', None) # Allow to see all columns when viewing data
 pd.set_option('display.float_format', lambda x: '%.3f' % x) # Prevent scientific numbers
-vehicles = pd.read_csv('Data/vehicles_no_url.csv') # Uploading the data
 
-####### GENERAL COMMANDS TO VIEW STUFF #######
+####### UPLOADING DATA #######
+vehicles = pd.read_csv('Data/vehicles_no_url.csv') # Uploading the data 
+
+####### Viewing the data #######
 print(vehicles.columns) # View all cloums in the dataframe
 vehicles.info() # Summary of the DataFrame
 vehicles.dtypes # Display the data types of each column
@@ -13,8 +15,8 @@ vehicles.dtypes # Display the data types of each column
 ####################################### PREPROCESSING #######################################
 ####### Remove excessive variables #######
 # Removing the columns
-vehicles.drop(columns=['id'], inplace=True) # Useless
-vehicles.drop(columns=['county'], inplace=True) # 100 % missing / Useless coloum left in by mistake
+vehicles.drop(columns=['id'], inplace=True) # ID it not required
+vehicles.drop(columns=['county'], inplace=True) # 100 % missing / coloum left in by mistake
 vehicles.drop(columns=['VIN'], inplace=True) # Useless
 vehicles.drop(columns=['posting_date'], inplace=True) # We just need the year of the car, not the posting date
 vehicles.drop(columns=['lat'], inplace=True) # Excessive because of state coloum
@@ -24,7 +26,7 @@ vehicles.drop(columns=['size'], inplace=True) # Too Many missings / Craigslist s
 vehicles.drop(columns=['model'], inplace=True) # Poor data quality
 vehicles.drop(columns=['title_status'], inplace=True) # Poor data quality
 
-# Removing "cylinders" in all the rows from the column cylinder
+# Removing "cylinders" in all the rows from the column cylinder, we just need the number.
 vehicles['cylinders']
 vehicles['cylinders'] = vehicles['cylinders'].str.replace(' cylinders', '').str.replace('cylinders', '') 
 
@@ -34,6 +36,8 @@ vehicles.rename(columns={'fuel': 'fuel_type'}, inplace=True)
 # type
 vehicles.rename(columns={'type': 'car_type'}, inplace=True)
 
+####### Saving as a new csv file #######
+vehicles.to_csv('Data/vehicles_clean.csv', index=False)
 
 #### FUNCTION TO BE CALLED TO CORRECT DATA TYPES ####
 # Convert each column to correct data type (creating function)
@@ -52,6 +56,3 @@ def apply_data_types(df):
     df['year'] = df['year'].astype('category')
     df['odometer'] = df['odometer'].astype('category')
     return df
-
-####### Saving as a new csv file #######
-vehicles.to_csv('Data/vehicles_clean.csv', index=False)
