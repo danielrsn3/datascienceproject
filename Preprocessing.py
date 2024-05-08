@@ -49,6 +49,7 @@ plt.show()
 
 # Drop NA
 vehicles = vehicles.dropna() # dropping all remaining missings
+vehicles.info()
 
 # Saving as a new csv file
 vehicles.to_csv('Data/vehicles_Preprocessed.csv', index=False)

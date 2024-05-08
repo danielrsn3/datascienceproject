@@ -1,13 +1,10 @@
-####################################### MODELLING #######################################
-import pandas as pd
-
+######################################## Split ########################################
 # Import feature engineered data
+import pandas as pd
 vehicles = pd.read_csv('Data/vehicles_FeatureEngineered.csv')
 
-############### Split #######################
 # Stratified sampling / split
 from sklearn.model_selection import train_test_split
-# Assuming 'vehicles_nona' is your DataFrame and 'price' is the column you want to stratify by
 # Set random seed for reproducibility
 np.random.seed(123)
 # Binning prices into categories
@@ -28,8 +25,9 @@ y_train = train_vehicles['price']
 X_test = test_vehicles.drop('price', axis=1)
 y_test = test_vehicles['price']
 
+####################################### MODELLING #######################################
 
-################ Linear Regression ###################
+##### Linear Regression #####
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -54,7 +52,8 @@ print(f"Mean Absolute Error: {mae}") # 3842.294117647059
 print(f"Mean Squared Error: {mse}") # 28796834.504160374
 
 
-################ Support Vector Machines (Regression) ###################
+
+##### Support Vector Machines (Regression) #####
 from sklearn import svm
 svm = svm.SVR()
 svm.fit(X_train, y_train)
@@ -68,7 +67,7 @@ print(f"Root Mean Squared Error: {rmse_svm}") # 12086.086598954298
 print(f"Mean Absolute Error: {mae_svm}") # 8899.947097294988
 print(f"Mean Squared Error: {mse_svm}") # 146073489.27742267
 
-################ Decision Tree ###################
+##### Decision Tree #####
 from sklearn import tree
 clf = tree.DecisionTreeRegressor()
 clf = clf.fit(X_train, y_train)
@@ -82,7 +81,10 @@ print(f"Root Mean Squared Error: {rmse}") # 4711.732945825287
 print(f"Mean Absolute Error: {mae}") # 2352.5058552119926
 print(f"Mean Squared Error: {mse}") # 22200427.352775436
 
-################ Ridge regression ###################
+
+
+
+##### Ridge regression #####
 from sklearn import linear_model
 reg = linear_model.Ridge(alpha=.5)
 reg.fit(X_train, y_train)
@@ -96,7 +98,7 @@ print(f"Root Mean Squared Error: {rmse_rid}") # 5366.365037459648
 print(f"Mean Absolute Error: {mae_rid}") # 3842.056265424365
 print(f"Mean Squared Error: {mse_rid}") # 28797873.71526929
 
-################ Bayesian Ridge regression ###################
+##### Bayesian Ridge regression #####
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
@@ -113,7 +115,8 @@ print(f"Mean Absolute Error: {mae_bay}") # 3842.2151609642274
 print(f"Mean Squared Error: {mse_bay}") # 28800637.13272043
 
 
-################ Lasso regression ###################
+
+##### Lasso regression #####
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
@@ -130,7 +133,8 @@ print(f"Mean Absolute Error: {mae_las}") # 3842.113763171372
 print(f"Mean Squared Error: {mse_las}") # 28800412.927373704
 
 
-################ KNN regression ###################
+
+##### KNN regression #####
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
@@ -168,7 +172,9 @@ predictions_knn = knn_regressor.predict(X_test)
 rmse_knn = np.sqrt(mean_squared_error(y_test, predictions_knn))
 print(f"Root Mean Squared Error: {rmse_knn}") # 4935.306805828042
 
-################ ElasticNet Regression ###################
+
+
+##### ElasticNet Regression #####
 from sklearn.linear_model import ElasticNet
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
@@ -185,7 +191,8 @@ print(f"Mean Absolute Error: {mae_elastic_net}") # 4746.45460425704
 print(f"Mean Squared Error: {mse_elastic_net}") # 43378144.83091188
 
 
-################ Random Forest Regression ###################
+
+##### Random Forest Regression #####
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
@@ -201,7 +208,9 @@ print(f"Root Mean Squared Error: {rmse_random_forest}") # 3673.1164056550765 med
 print(f"Mean Absolute Error: {mae_random_forest}") # 1980.435267052644
 print(f"Mean Squared Error: {mse_random_forest}") # 13456182.864120314
 
-################ Random Forest Regression med hypergrid ################### # tager 1 time at køre
+
+
+##### Random Forest Regression med hypergrid (long convertion time) #####
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import mean_squared_error
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
@@ -223,7 +232,8 @@ rmse_grid_search_rf = np.sqrt(mean_squared_error(y_test, predictions_grid_search
 print(f"Random Forest Regression Root Mean Squared Error: {rmse_grid_search_rf}") # 3673.1164056550765
 
 
-############### Gradient Boosting Regression ###############
+
+##### Gradient Boosting Regression #####
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
@@ -244,8 +254,6 @@ print("Root Mean Squared Error:", rmse)
 print("Mean Absolute Error:", mae) # 2305.8761729442467 for n=1000
 print("Mean Squared Error:", mse) # 14101422.157574872 for n=1000
 
-
-
 # Display feature importances
 feature_importances = pd.DataFrame(gbr.feature_importances_,
                                    index = X_train.columns,
@@ -253,7 +261,8 @@ feature_importances = pd.DataFrame(gbr.feature_importances_,
 print(feature_importances)
 
 
-################ Gradient Boosting Regression with hypergrid ################### # tager lang tid
+
+##### Gradient Boosting Regression with hypergrid (long convertion time) #####
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import GradientBoostingRegressor
 
@@ -264,7 +273,6 @@ param_grid_gb = {
     'max_depth': [3, 5],
     'min_samples_split': [2, 5]
 }
-
 # Grid search for Gradient Boosting
 grid_search_gb = GridSearchCV(GradientBoostingRegressor(random_state=42), param_grid_gb, cv=5, scoring='neg_mean_squared_error')
 grid_search_gb.fit(X_train, y_train)
@@ -279,16 +287,12 @@ rmse_grid_search_gb = np.sqrt(mean_squared_error(y_test, predictions_grid_search
 print(f"Gradient Boosting Regression Root Mean Squared Error: {rmse_grid_search_gb}") # 4104.193407930705
 
 
-###### PLOT WITH RESULTS ######
-
+# PLOT WITH RESULTS #
 import matplotlib.pyplot as plt
-
 # Sort the DataFrame by RMSE in descending order
 results_df_sorted = results_df.sort_values(by='RMSE', ascending=False)
-
 # Set the style of the plot
 plt.style.use('seaborn-darkgrid')
-
 # Create a bar plot
 plt.figure(figsize=(10, 6))
 plt.barh(results_df_sorted['Model'], results_df_sorted['RMSE'], color='skyblue')
@@ -296,6 +300,4 @@ plt.xlabel('Root Mean Squared Error (RMSE)')
 plt.ylabel('Model')
 plt.title('Comparison of RMSE for Different Models')
 plt.tight_layout()
-
-# Show the plot
-plt.show()
+plt.show() # Show the plot

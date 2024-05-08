@@ -59,14 +59,11 @@ plt.grid(axis='y')
 plt.show()
     # Comments:
     # Remove motorcycles 
-    # Multiple manufacturers with very high average price
+    # Multiple manufacturers with very high average price, these 'highly prices vechiles will be removed later.
 
-
-filtered_data = vehicles[(vehicles['price'] <= 100000) & (vehicles['year'].notna())]
 # Correlation between categorical features
 from scipy.stats import chi2_contingency
 import numpy as np
-
 def cramers_v(x, y):
     """Calculate Cramer's V statistic for two categorical series."""
     contingency_table = pd.crosstab(x, y) # Creating a contingency table
@@ -78,13 +75,10 @@ def cramers_v(x, y):
     rcorr = r - ((r-1)**2)/(n-1) # Calculate Corrected Row Totals
     kcorr = k - ((k-1)**2)/(n-1) # Calculate Corrected Column Totals
     return np.sqrt(phi2corr / min((kcorr-1), (rcorr-1))) # Compute Cramer's V
-
 # Identify categorical columns
 categorical_columns = vehicles.select_dtypes(include=['object']).columns
-
 # Compute Cramer's V matrix
 cramers_v_matrix = pd.DataFrame(index=categorical_columns, columns=categorical_columns)
-
 # Optimizing the computation of Cramer's V matrix
 for i, col1 in enumerate(categorical_columns):
     for col2 in categorical_columns[i:]:  # Start from current index to avoid recomputation
@@ -100,13 +94,11 @@ for i, col1 in enumerate(categorical_columns):
 cramers_v_matrix
 
 
-##### HEATMAP ######
+# HEATMAP
 import seaborn as sns
 import matplotlib.pyplot as plt
-
 # Ensure the data is in float format for plotting
 cramers_v_matrix = cramers_v_matrix.astype(float)
-
 # Create a heatmap for Cramer's V matrix
 plt.figure(figsize=(10, 8))  # Adjust the size of the plot as necessary
 heatmap = sns.heatmap(
