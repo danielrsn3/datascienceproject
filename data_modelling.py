@@ -43,9 +43,15 @@ model.fit(X_train, y_train)
 # Predict on test set
 predictions = model.predict(X_test)
 
-# Calculate the mean squared error
+# Calculate the evaluation metrics
 rmse = np.sqrt(mean_squared_error(y_test, predictions))
-print(f"Root Mean Squared Error: {rmse}") # 5367.323677284773
+mae = mean_absolute_error(y_test, predictions)
+mse = mean_squared_error(y_test, predictions)
+
+print(f"Root Mean Squared Error: {rmse}") # 5366.268210233288
+print(f"Mean Absolute Error: {mae}") # 3842.294117647059
+print(f"Mean Squared Error: {mse}") # 28796834.504160374
+
 
 ################ Support Vector Machines (Regression) ###################
 from sklearn import svm
@@ -58,8 +64,8 @@ mae_svm = mean_absolute_error(y_test, predictions_svm)
 mse_svm = mean_squared_error(y_test, predictions_svm)
 
 print(f"Root Mean Squared Error: {rmse_svm}") # 12086.086598954298
-print(f"Mean Absolute Error: {mae_svm}")
-print(f"Mean Squared Error: {mse_svm}")
+print(f"Mean Absolute Error: {mae_svm}") # 8899.947097294988
+print(f"Mean Squared Error: {mse_svm}") # 146073489.27742267
 
 ################ Decision Tree ###################
 from sklearn import tree
@@ -71,9 +77,9 @@ rmse = np.sqrt(mean_squared_error(y_test, predictions))
 mae = mean_absolute_error(y_test, predictions)
 mse = mean_squared_error(y_test, predictions)
 
-print(f"Root Mean Squared Error: {rmse}") # 4688.806060242256
-print(f"Mean Absolute Error: {mae}")
-print(f"Mean Squared Error: {mse}")
+print(f"Root Mean Squared Error: {rmse}") # 4711.732945825287
+print(f"Mean Absolute Error: {mae}") # 2352.5058552119926
+print(f"Mean Squared Error: {mse}") # 22200427.352775436
 
 ################ Ridge regression ###################
 from sklearn import linear_model
@@ -102,8 +108,8 @@ mae_bay = mean_absolute_error(y_test, predictions_bay)
 mse_bay = mean_squared_error(y_test, predictions_bay)
 
 print(f"Root Mean Squared Error: {rmse_bay}") # 5366.62250700759
-print(f"Mean Absolute Error: {mae_bay}")
-print(f"Mean Squared Error: {mse_bay}")
+print(f"Mean Absolute Error: {mae_bay}") # 3842.2151609642274
+print(f"Mean Squared Error: {mse_bay}") # 28800637.13272043
 
 
 ################ Lasso regression ###################
@@ -119,8 +125,8 @@ mae_las = mean_absolute_error(y_test, predictions_las)
 mse_las = mean_squared_error(y_test, predictions_las)
 
 print(f"Root Mean Squared Error: {rmse_las}") # 5366.601618098152
-print(f"Mean Absolute Error: {mae_las}")
-print(f"Mean Squared Error: {mse_las}")
+print(f"Mean Absolute Error: {mae_las}") # 3842.113763171372
+print(f"Mean Squared Error: {mse_las}") # 28800412.927373704
 
 
 ################ KNN regression ###################
@@ -151,8 +157,8 @@ mae_knn = mean_absolute_error(y_test, predictions_knn)
 mse_knn = mean_squared_error(y_test, predictions_knn)
 
 print(f"Root Mean Squared Error: {rmse_knn}") # 4928.648101840205
-print(f"Mean Absolute Error: {mae_knn}")
-print(f"Mean Squared Error: {mse_knn}")
+print(f"Mean Absolute Error: {mae_knn}") # 2962.8740643171523
+print(f"Mean Squared Error: {mse_knn}") # 24291572.111773055
 
 # 6
 knn_regressor = KNeighborsRegressor(n_neighbors=6)
@@ -174,8 +180,8 @@ mae_elastic_net = mean_absolute_error(y_test, predictions_elastic_net)
 mse_elastic_net = mean_squared_error(y_test, predictions_elastic_net)
 
 print(f"Root Mean Squared Error: {rmse_elastic_net}") # 6586.208684130186
-print(f"Mean Absolute Error: {mae_elastic_net}")
-print(f"Mean Squared Error: {mse_elastic_net}")
+print(f"Mean Absolute Error: {mae_elastic_net}") # 4746.45460425704
+print(f"Mean Squared Error: {mse_elastic_net}") # 43378144.83091188
 
 
 ################ Random Forest Regression ###################
@@ -191,8 +197,8 @@ mae_random_forest = mean_absolute_error(y_test, predictions_random_forest)
 mse_random_forest = mean_squared_error(y_test, predictions_random_forest)
 
 print(f"Root Mean Squared Error: {rmse_random_forest}") # 3673.1164056550765 med 200 n_estimators, # 3668.267011017643 med 500 n_estimators
-print(f"Mean Absolute Error: {mae_random_forest}")
-print(f"Mean Squared Error: {mse_random_forest}")
+print(f"Mean Absolute Error: {mae_random_forest}") # 1980.435267052644
+print(f"Mean Squared Error: {mse_random_forest}") # 13456182.864120314
 
 ################ Random Forest Regression med hypergrid ################### # tager 1 time at køre
 from sklearn.model_selection import GridSearchCV
@@ -234,8 +240,8 @@ print("Root Mean Squared Error:", rmse)
 # 5625.007709969297 (n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42)
 # 3834.3064543798773 (n_estimators=500, learning_rate=0.3, max_depth=5, random_state=42)
 # 3755.186035015425 (n_estimators=1000, learning_rate=0.5, max_depth=5, random_state=42)
-print("Mean Absolute Error:", mae)
-print("Mean Squared Error:", mse)
+print("Mean Absolute Error:", mae) # 2305.8761729442467 for n=1000
+print("Mean Squared Error:", mse) # 14101422.157574872 for n=1000
 
 
 
