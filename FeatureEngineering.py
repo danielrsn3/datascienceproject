@@ -8,36 +8,38 @@ vehicles = pd.read_csv('Data/vehicles_Preprocessed.csv') # Uploading the data
 # Viewing data types
 vehicles.dtypes
 
+
 # Ektra preprossing steps caused by data Exploration
-# Creating the years_old variable and removing the original variable 'year'
+    # Creating the years_old variable and removing the original variable 'year'
 vehicles['year'] = vehicles['year'].astype('Int64') # Treat year as numeric to be able to substract
 vehicles['years_old'] = 2021 - vehicles['year']
 vehicles.drop(columns=['year'], inplace=True) # deleting the original year column
-# Removing rows where price is below 1000 and above 57300
+    # Removing rows where price is below 1000 and above 57300
 vehicles = vehicles[vehicles['price'] > 1000] # To exclude damaged cars and listings with no intention of selling to that price
 vehicles = vehicles[vehicles['price'] < 57300] # To exclude observations where the price is above 57300 (our upper whisker from the boxplot)
 print((vehicles['price'].min(), vehicles['price'].max())) # View price range
-# Exclude cars older than 1980
+    # Exclude cars older than 1980
 vehicles = vehicles[vehicles['years_old'] <= 30]
 vehicles['years_old'] = vehicles['years_old'].astype('object')
-# Removing rows where odometer is above 300000
+    # Removing rows where odometer is above 300000
 vehicles['odometer'] = vehicles['odometer'].astype('float64') # Treat years_old as float64
 vehicles = vehicles[vehicles['odometer'] < 300000]
-# Modifying observations
+    # Modifying observations
 vehicles = vehicles[vehicles['condition'] != 'salvage'] # Remove rows containing 'salvage' in the 'condition' variable
 vehicles = vehicles[~vehicles['manufacturer'].isin(['harley-davidson', 'kawasaki'])] # removing motorcycle brands
-# Creating Ranges for 'odometer'
+    # Creating Ranges for 'odometer'
     # Define the ranges for the bins
 bins = [0, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000, 160000, 170000, 180000, 190000, 200000, float('inf')]
-    # Define labels for the bins
+        # Define labels for the bins
 labels = ['0-10000', '10000-20000', '20000-30000', '30000-40000', '40000-50000', '50000-60000', '60000-70000', '70000-80000', '80000-90000', '90000-100000', '100000-110000', '110000-120000', '120000-130000', '130000-140000', '140000-150000', '150000-160000', '160000-170000', '170000-180000', '180000-190000', '190000-200000', '200000+']
-    # Create a new column 'odometer_range' with the binned values
+        # Create a new column 'odometer_range' with the binned values
 vehicles['odometer_range'] = pd.cut(vehicles['odometer'], bins=bins, labels=labels, right=False)
-    # Drop the old 'odometer' variable
+        # Drop the old 'odometer' variable
 vehicles.drop(columns=['odometer'], inplace=True)
-    # Display the count of values in each bin
+        # Display the count of values in each bin
 print(vehicles['odometer_range'].value_counts())
 vehicles['odometer_range'] = vehicles['odometer_range'].astype('category')
+
 
 
 # Convert each column to correct data type
@@ -57,6 +59,7 @@ vehicles['odometer_range'] = vehicles['odometer_range'].astype('category')
 vehicles.dtypes # Now all features are converted into categories except our target variable 'price'.
 
 
+
 # Lumping
 # Manufacturer lumping (creating a 'others' level inside the variable manufacturer)
 mf = vehicles['manufacturer'].value_counts()
@@ -70,6 +73,7 @@ vehicles['paint_color'].value_counts()
 vehicles['paint_color'] = vehicles['paint_color'].astype('category')
 
 
+
 # ONE HOT ENCODING
 vehicles.dtypes
 # Apply one-hot encoding for our features
@@ -77,6 +81,7 @@ categorical_columns = ['manufacturer', 'condition', 'cylinders', 'fuel_type', 't
 vehicles = pd.get_dummies(vehicles, columns=categorical_columns, dtype=int)
 print(vehicles.head())
 vehicles.dtypes
+
 
 
 # Removing zero and near zero variance

@@ -1,3 +1,5 @@
+####################################### EXPLORATION #######################################
+
 # Importing the relevant libraries
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -109,5 +111,5 @@ heatmap = sns.heatmap(
     cbar=True,               # Enable the color bar on the side
     annot_kws={'size': 12, 'color': 'black'}  # Set annotation font size and color for visibility
 )
-plt.title('Heatmap of Cramer\'s V Statistics Between Categorical Features')  # Title of the plot
-plt.show()  # Display the plot
+plt.title('Heatmap of Cramer\'s V Statistics Between Categorical Features')
+plt.show()

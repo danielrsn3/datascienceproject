@@ -1,4 +1,5 @@
 ######################################## Split ########################################
+
 # Import feature engineered data
 import pandas as pd
 vehicles = pd.read_csv('Data/vehicles_FeatureEngineered.csv')
@@ -6,6 +7,7 @@ vehicles = pd.read_csv('Data/vehicles_FeatureEngineered.csv')
 # Stratified sampling / split
 from sklearn.model_selection import train_test_split
 # Set random seed for reproducibility
+import numpy as np
 np.random.seed(123)
 # Binning prices into categories
 bins = pd.cut(vehicles['price'], bins=50, labels=False)  # Adjust the number of bins as needed
@@ -31,7 +33,6 @@ y_test = test_vehicles['price']
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
-import numpy as np
 
 # Create a Linear Regression model
 model = LinearRegression()
@@ -97,6 +98,8 @@ mse_rid = mean_squared_error(y_test, predictions_rid)
 print(f"Root Mean Squared Error: {rmse_rid}") # 5366.365037459648
 print(f"Mean Absolute Error: {mae_rid}") # 3842.056265424365
 print(f"Mean Squared Error: {mse_rid}") # 28797873.71526929
+
+
 
 ##### Bayesian Ridge regression #####
 from sklearn import linear_model

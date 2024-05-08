@@ -33,7 +33,7 @@ vehicles['cylinders'] = vehicles['cylinders'].str.replace(' cylinders', '').str.
 vehicles.rename(columns={'fuel': 'fuel_type'}, inplace=True)
 vehicles.rename(columns={'type': 'car_type'}, inplace=True)
 
-# Plot the percentage of missing values in each column
+# Missing values
 import matplotlib.pyplot as plt
 import seaborn as sns
 # Calculate the percentage of missing values for each column
@@ -46,10 +46,8 @@ plt.xlabel('Percentage of Missing Values')
 plt.ylabel('Columns')
 plt.grid(True, linestyle='--', alpha=0.6)
 plt.show()
-
-# Drop NA
+# Remove missing values
 vehicles = vehicles.dropna() # dropping all remaining missings
-vehicles.info()
 
 # Saving as a new csv file
 vehicles.to_csv('Data/vehicles_Preprocessed.csv', index=False)
