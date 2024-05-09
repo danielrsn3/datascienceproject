@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-# Loading the datasets from pickle files
+# Loading the test and training datasets from pickle files
 X_train = pd.read_pickle("./data/X_train.pkl")
 y_train = pd.read_pickle("./data/y_train.pkl")
 X_test = pd.read_pickle("./data/X_test.pkl")
