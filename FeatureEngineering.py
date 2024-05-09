@@ -102,5 +102,33 @@ vehicles_selected = selector.fit_transform(vehicles)
 # Imcorporating into a new dataframe:
 vehicles = pd.DataFrame(vehicles_selected, columns=vehicles.columns[selector.get_support()])
 
-# Saving as a new csv file
-vehicles.to_csv('Data/vehicles_FeatureEngineered.csv', index=False)
+######################################## Split ########################################
+
+# Stratified sampling / split
+from sklearn.model_selection import train_test_split
+# Set random seed for reproducibility
+import numpy as np
+np.random.seed(123)
+# Binning prices into categories 
+bins = pd.cut(vehicles['price'], bins=50, labels=False) 
+vehicles['price_bin'] = bins
+# Splitting based on the price bins
+train_vehicles, test_vehicles = train_test_split(vehicles, test_size=0.3, stratify=vehicles['price_bin'])
+# Dropping 'price_bin' from both train and test sets
+test_vehicles.drop(columns=['price_bin'], inplace=True)
+train_vehicles.drop(columns=['price_bin'], inplace=True)
+# Now, let's check the data types of the columns in the training set
+print(test_vehicles.dtypes)
+
+# 'Price' is the target variable and all other columns are features
+X_train = train_vehicles.drop('price', axis=1)
+y_train = train_vehicles['price']
+
+X_test = test_vehicles.drop('price', axis=1)
+y_test = test_vehicles['price']
+
+# Saving the datasets to pickle files
+X_train.to_pickle("./data/X_train.pkl")
+y_train.to_pickle("./data/y_train.pkl")
+X_test.to_pickle("./data/X_test.pkl")
+y_test.to_pickle("./data/y_test.pkl")

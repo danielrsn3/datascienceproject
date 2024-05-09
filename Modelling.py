@@ -1,37 +1,15 @@
-######################################## Split ########################################
-
-# Import feature engineered data
-import pandas as pd
-vehicles = pd.read_csv('Data/vehicles_FeatureEngineered.csv')
-
-# Stratified sampling / split
-from sklearn.model_selection import train_test_split
-# Set random seed for reproducibility
 import numpy as np
-np.random.seed(123)
-# Binning prices into categories
-bins = pd.cut(vehicles['price'], bins=50, labels=False)  # Adjust the number of bins as needed
-vehicles['price_bin'] = bins
-# Splitting based on the price bins
-train_vehicles, test_vehicles = train_test_split(vehicles, test_size=0.3, stratify=vehicles['price_bin'])
-# Dropping 'price_bin' from both train and test sets
-test_vehicles.drop(columns=['price_bin'], inplace=True)
-train_vehicles.drop(columns=['price_bin'], inplace=True)
-# Now, let's check the data types of the columns in the training set
-print(test_vehicles.dtypes)
-
-# 'Price' is the target variable and all other columns are features
-X_train = train_vehicles.drop('price', axis=1)
-y_train = train_vehicles['price']
-
-X_test = test_vehicles.drop('price', axis=1)
-y_test = test_vehicles['price']
+import pandas as pd
+# Loading the datasets from pickle files
+X_train = pd.read_pickle("./data/X_train.pkl")
+y_train = pd.read_pickle("./data/y_train.pkl")
+X_test = pd.read_pickle("./data/X_test.pkl")
+y_test = pd.read_pickle("./data/y_test.pkl")
 
 ####################################### MODELLING #######################################
 
 ##### Linear Regression #####
 from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 # Create a Linear Regression model
@@ -48,9 +26,9 @@ rmse = np.sqrt(mean_squared_error(y_test, predictions))
 mae = mean_absolute_error(y_test, predictions)
 mse = mean_squared_error(y_test, predictions)
 
-print(f"Root Mean Squared Error: {rmse}") # 5366.268210233288
-print(f"Mean Absolute Error: {mae}") # 3842.294117647059
-print(f"Mean Squared Error: {mse}") # 28796834.504160374
+print(f"Root Mean Squared Error: {rmse}") # 4964.8477713325665
+print(f"Mean Absolute Error: {mae}") # 3658.1130662802334
+print(f"Mean Squared Error: {mse}") # 24649713.39250595
 
 
 
@@ -64,9 +42,11 @@ rmse_svm = np.sqrt(mean_squared_error(y_test, predictions_svm))
 mae_svm = mean_absolute_error(y_test, predictions_svm)
 mse_svm = mean_squared_error(y_test, predictions_svm)
 
-print(f"Root Mean Squared Error: {rmse_svm}") # 12086.086598954298
-print(f"Mean Absolute Error: {mae_svm}") # 8899.947097294988
-print(f"Mean Squared Error: {mse_svm}") # 146073489.27742267
+print(f"Root Mean Squared Error: {rmse_svm}") # 11431.011371518482
+print(f"Mean Absolute Error: {mae_svm}") # 8634.294913055208
+print(f"Mean Squared Error: {mse_svm}") # 130668020.97578484
+
+
 
 ##### Decision Tree #####
 from sklearn import tree
@@ -78,10 +58,9 @@ rmse = np.sqrt(mean_squared_error(y_test, predictions))
 mae = mean_absolute_error(y_test, predictions)
 mse = mean_squared_error(y_test, predictions)
 
-print(f"Root Mean Squared Error: {rmse}") # 4711.732945825287
-print(f"Mean Absolute Error: {mae}") # 2352.5058552119926
-print(f"Mean Squared Error: {mse}") # 22200427.352775436
-
+print(f"Root Mean Squared Error: {rmse}") # 4392.043777131446
+print(f"Mean Absolute Error: {mae}") # 2236.5374367097247
+print(f"Mean Squared Error: {mse}") # 19290048.540239062
 
 
 
@@ -95,9 +74,9 @@ rmse_rid = np.sqrt(mean_squared_error(y_test, predictions_rid))
 mae_rid = mean_absolute_error(y_test, predictions_rid)
 mse_rid = mean_squared_error(y_test, predictions_rid)
 
-print(f"Root Mean Squared Error: {rmse_rid}") # 5366.365037459648
-print(f"Mean Absolute Error: {mae_rid}") # 3842.056265424365
-print(f"Mean Squared Error: {mse_rid}") # 28797873.71526929
+print(f"Root Mean Squared Error: {rmse_rid}") # 4964.70945848385
+print(f"Mean Absolute Error: {mae_rid}") # 3658.007984722207
+print(f"Mean Squared Error: {mse_rid}") # 24648340.007159002
 
 
 
@@ -113,9 +92,9 @@ rmse_bay = np.sqrt(mean_squared_error(y_test, predictions_bay))
 mae_bay = mean_absolute_error(y_test, predictions_bay)
 mse_bay = mean_squared_error(y_test, predictions_bay)
 
-print(f"Root Mean Squared Error: {rmse_bay}") # 5366.62250700759
-print(f"Mean Absolute Error: {mae_bay}") # 3842.2151609642274
-print(f"Mean Squared Error: {mse_bay}") # 28800637.13272043
+print(f"Root Mean Squared Error: {rmse_bay}") # 4964.890065071595
+print(f"Mean Absolute Error: {mae_bay}") # 3657.97949290559
+print(f"Mean Squared Error: {mse_bay}") # 24650133.35824663
 
 
 
@@ -131,9 +110,9 @@ rmse_las = np.sqrt(mean_squared_error(y_test, predictions_las))
 mae_las = mean_absolute_error(y_test, predictions_las)
 mse_las = mean_squared_error(y_test, predictions_las)
 
-print(f"Root Mean Squared Error: {rmse_las}") # 5366.601618098152
-print(f"Mean Absolute Error: {mae_las}") # 3842.113763171372
-print(f"Mean Squared Error: {mse_las}") # 28800412.927373704
+print(f"Root Mean Squared Error: {rmse_las}") # 4964.881702129805
+print(f"Mean Absolute Error: {mae_las}") # 3658.1244398886734
+print(f"Mean Squared Error: {mse_las}") # 24650050.31614335
 
 
 
@@ -146,14 +125,14 @@ knn_regressor = KNeighborsRegressor(n_neighbors=3)
 knn_regressor.fit(X_train, y_train)
 predictions_knn = knn_regressor.predict(X_test)
 rmse_knn = np.sqrt(mean_squared_error(y_test, predictions_knn))
-print(f"Root Mean Squared Error: {rmse_knn}") # 5004.641317204217
+print(f"Root Mean Squared Error: {rmse_knn}") # 4496.031533908051
 
 # 4
 knn_regressor = KNeighborsRegressor(n_neighbors=4)
 knn_regressor.fit(X_train, y_train)
 predictions_knn = knn_regressor.predict(X_test)
 rmse_knn = np.sqrt(mean_squared_error(y_test, predictions_knn))
-print(f"Root Mean Squared Error: {rmse_knn}") # 4940.608706349057
+print(f"Root Mean Squared Error: {rmse_knn}") # 4434.555194280254
 
 # 5
 knn_regressor = KNeighborsRegressor(n_neighbors=5)
@@ -164,16 +143,16 @@ rmse_knn = np.sqrt(mean_squared_error(y_test, predictions_knn))
 mae_knn = mean_absolute_error(y_test, predictions_knn)
 mse_knn = mean_squared_error(y_test, predictions_knn)
 
-print(f"Root Mean Squared Error: {rmse_knn}") # 4928.648101840205
-print(f"Mean Absolute Error: {mae_knn}") # 2962.8740643171523
-print(f"Mean Squared Error: {mse_knn}") # 24291572.111773055
+print(f"Root Mean Squared Error: {rmse_knn}") # 4432.368120887695
+print(f"Mean Absolute Error: {mae_knn}") # 2753.7333264327362
+print(f"Mean Squared Error: {mse_knn}") # 19645887.15906152
 
 # 6
 knn_regressor = KNeighborsRegressor(n_neighbors=6)
 knn_regressor.fit(X_train, y_train)
 predictions_knn = knn_regressor.predict(X_test)
 rmse_knn = np.sqrt(mean_squared_error(y_test, predictions_knn))
-print(f"Root Mean Squared Error: {rmse_knn}") # 4935.306805828042
+print(f"Root Mean Squared Error: {rmse_knn}") # 4430.670038589296 (LAVERE END ved 5 NEIGHBORS)
 
 
 
@@ -189,9 +168,9 @@ rmse_elastic_net = np.sqrt(mean_squared_error(y_test, predictions_elastic_net))
 mae_elastic_net = mean_absolute_error(y_test, predictions_elastic_net)
 mse_elastic_net = mean_squared_error(y_test, predictions_elastic_net)
 
-print(f"Root Mean Squared Error: {rmse_elastic_net}") # 6586.208684130186
-print(f"Mean Absolute Error: {mae_elastic_net}") # 4746.45460425704
-print(f"Mean Squared Error: {mse_elastic_net}") # 43378144.83091188
+print(f"Root Mean Squared Error: {rmse_elastic_net}") # 6034.759524938521
+print(f"Mean Absolute Error: {mae_elastic_net}") # 4474.25646935197
+print(f"Mean Squared Error: {mse_elastic_net}") # 36418322.5238362
 
 
 
@@ -207,9 +186,9 @@ rmse_random_forest = np.sqrt(mean_squared_error(y_test, predictions_random_fores
 mae_random_forest = mean_absolute_error(y_test, predictions_random_forest)
 mse_random_forest = mean_squared_error(y_test, predictions_random_forest)
 
-print(f"Root Mean Squared Error: {rmse_random_forest}") # 3673.1164056550765 med 200 n_estimators, # 3668.267011017643 med 500 n_estimators
-print(f"Mean Absolute Error: {mae_random_forest}") # 1980.435267052644
-print(f"Mean Squared Error: {mse_random_forest}") # 13456182.864120314
+print(f"Root Mean Squared Error: {rmse_random_forest}") # 3428.0649056250068 med 50 n_estimators
+print(f"Mean Absolute Error: {mae_random_forest}") # 1914.1892558930567
+print(f"Mean Squared Error: {mse_random_forest}") # 11751628.997177787
 
 
 
@@ -232,7 +211,7 @@ print("Best parameters for Random Forest:", grid_search_rf.best_params_)
 
 predictions_grid_search_rf = grid_search_rf.predict(X_test)
 rmse_grid_search_rf = np.sqrt(mean_squared_error(y_test, predictions_grid_search_rf))
-print(f"Random Forest Regression Root Mean Squared Error: {rmse_grid_search_rf}") # 3673.1164056550765
+print(f"Random Forest Regression Root Mean Squared Error: {rmse_grid_search_rf}") # HAR IKKE KØRT DENNE
 
 
 
@@ -251,11 +230,11 @@ mae = mean_absolute_error(y_test, y_pred) # Calculate the mean absolute error (M
 mse = mean_squared_error(y_test, y_pred) # Calculate the mean squared error (MSE)
 
 print("Root Mean Squared Error:", rmse)
-# 5625.007709969297 (n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42)
-# 3834.3064543798773 (n_estimators=500, learning_rate=0.3, max_depth=5, random_state=42)
-# 3755.186035015425 (n_estimators=1000, learning_rate=0.5, max_depth=5, random_state=42)
-print("Mean Absolute Error:", mae) # 2305.8761729442467 for n=1000
-print("Mean Squared Error:", mse) # 14101422.157574872 for n=1000
+# 5625.007709969297 (n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42) # IKKE KØRT PÅ NY
+# 3834.3064543798773 (n_estimators=500, learning_rate=0.3, max_depth=5, random_state=42) # IKKE KØRT PÅ NY
+# 3412.153134635619 (n_estimators=1000, learning_rate=0.5, max_depth=5, random_state=42)
+print("Mean Absolute Error:", mae) # 2144.671269246954 for n=1000
+print("Mean Squared Error:", mse) # 11642789.014203683 for n=1000
 
 # Display feature importances
 feature_importances = pd.DataFrame(gbr.feature_importances_,
@@ -287,7 +266,7 @@ print("Best parameters for Gradient Boosting:", grid_search_gb.best_params_)
 # predictions
 predictions_grid_search_gb = grid_search_gb.predict(X_test)
 rmse_grid_search_gb = np.sqrt(mean_squared_error(y_test, predictions_grid_search_gb))
-print(f"Gradient Boosting Regression Root Mean Squared Error: {rmse_grid_search_gb}") # 4104.193407930705
+print(f"Gradient Boosting Regression Root Mean Squared Error: {rmse_grid_search_gb}") # HAR IKKE KØRT DENNE
 
 
 # PLOT WITH RESULTS #
