@@ -46,8 +46,13 @@ plt.xlabel('Percentage of Missing Values')
 plt.ylabel('Columns')
 plt.grid(True, linestyle='--', alpha=0.6)
 plt.show()
+
+vehicles.info() # 426880 entries before remvoing missings
+
 # Remove missing values
 vehicles = vehicles.dropna() # dropping all remaining missings
+
+vehicles.info() # 117169 entries before remvoing missings
 
 # Saving as a new csv file
 vehicles.to_csv('Data/vehicles_Preprocessed.csv', index=False)
