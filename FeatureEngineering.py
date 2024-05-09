@@ -9,7 +9,7 @@ vehicles = pd.read_csv('Data/vehicles_Preprocessed.csv') # Uploading the data
 vehicles.dtypes
 
 
-# Ektra preprossing steps caused by data Exploration
+# Extra preprocessing steps caused by data Exploration
     # Creating the years_old variable and removing the original variable 'year'
 vehicles['year'] = vehicles['year'].astype('Int64') # Treat year as numeric to be able to substract
 vehicles['years_old'] = 2021 - vehicles['year']
@@ -18,8 +18,8 @@ vehicles.drop(columns=['year'], inplace=True) # deleting the original year colum
 vehicles = vehicles[vehicles['price'] > 1000] # To exclude damaged cars and listings with no intention of selling to that price
 vehicles = vehicles[vehicles['price'] < 57300] # To exclude observations where the price is above 57300 (our upper whisker from the boxplot)
 print((vehicles['price'].min(), vehicles['price'].max())) # View price range
-    # Exclude cars older than 1980
-vehicles = vehicles[vehicles['years_old'] <= 30]
+    # Exclude cars with more than 20 years of age
+vehicles = vehicles[vehicles['years_old'] <= 20]
 vehicles['years_old'] = vehicles['years_old'].astype('object')
     # Removing rows where odometer is above 300000
 vehicles['odometer'] = vehicles['odometer'].astype('float64') # Treat years_old as float64

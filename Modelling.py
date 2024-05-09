@@ -199,7 +199,7 @@ print(f"Mean Squared Error: {mse_elastic_net}") # 43378144.83091188
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-random_forest = RandomForestRegressor(n_estimators=500, random_state=42)
+random_forest = RandomForestRegressor(n_estimators=50, random_state=42)
 random_forest.fit(X_train, y_train)
 predictions_random_forest = random_forest.predict(X_test)
 
@@ -213,7 +213,7 @@ print(f"Mean Squared Error: {mse_random_forest}") # 13456182.864120314
 
 
 
-##### Random Forest Regression med hypergrid (long convertion time) #####
+##### Random Forest Regression med hypergrid (long convergence time) #####
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import mean_squared_error
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
@@ -265,7 +265,7 @@ print(feature_importances)
 
 
 
-##### Gradient Boosting Regression with hypergrid (long convertion time) #####
+##### Gradient Boosting Regression with hypergrid (long convergence time) #####
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import GradientBoostingRegressor
 

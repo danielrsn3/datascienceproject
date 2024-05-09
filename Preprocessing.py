@@ -15,7 +15,7 @@ vehicles.dtypes # Display the data types of each column
 
 # Remove excessive variables
 vehicles.drop(columns=['id'], inplace=True) # ID it not required
-vehicles.drop(columns=['county'], inplace=True) # 100 % missing / coloum left in by mistake
+vehicles.drop(columns=['county'], inplace=True) # 100 % missing / column left in by mistake
 vehicles.drop(columns=['VIN'], inplace=True) # Irrelevant
 vehicles.drop(columns=['posting_date'], inplace=True) # We just need the year of the car, not the posting date
 vehicles.drop(columns=['lat'], inplace=True) # Excessive because of state coloum
