@@ -1,35 +1,26 @@
 ####################################### APP CREATION (Deployment) #######################################
 import pandas as pd
 import numpy as np
-from sklearn import tree
-from sklearn.metrics import mean_squared_error
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.model_selection import train_test_split
 from flask import Flask, request, jsonify
 from datetime import datetime
+pd.set_option('display.max_rows', None)  # Set to None to display all rows
+pd.set_option('display.max_columns', None)  # Set to None to display all columns
+pd.set_option('display.max_colwidth', None)  # Set to None to display full width of column content
+pd.set_option('display.width', None)  # Set to None to make sure the display width fits the terminal or notebook cell
 
-# Load and prepare data
-vehicles = pd.read_csv('Data/vehicles_FeatureEngineered.csv')
+# Loading the test and training datasets from pickle files
+X_train = pd.read_pickle("./data/X_train.pkl")
+y_train = pd.read_pickle("./data/y_train.pkl")
+X_test = pd.read_pickle("./data/X_test.pkl")
+y_test = pd.read_pickle("./data/y_test.pkl")
 
-# Stratified sampling based on price
-np.random.seed(123)
-bins = pd.cut(vehicles['price'], bins=50, labels=False)
-vehicles['price_bin'] = bins
-train_vehicles, test_vehicles = train_test_split(vehicles, test_size=0.3, stratify=vehicles['price_bin'])
-train_vehicles.drop(columns=['price_bin'], inplace=True)
-test_vehicles.drop(columns=['price_bin'], inplace=True)
-
-# Separate features and target
-X_train = train_vehicles.drop('price', axis=1)
-y_train = train_vehicles['price']
-X_test = test_vehicles.drop('price', axis=1)
-y_test = test_vehicles['price']
-
-# Train a Decision Tree Regressor
-clf = tree.DecisionTreeRegressor()
-clf = clf.fit(X_train, y_train)
-predictions = clf.predict(X_test)
-rmse = np.sqrt(mean_squared_error(y_test, predictions))
-print(f"Root Mean Squared Error: {rmse}")
+# Train the Random Forest Regressor model again (due to large files, we could not save the previously trained model)
+random_forest = RandomForestRegressor(n_estimators=30, random_state=42)
+random_forest = random_forest.fit(X_train, y_train)
+predictions_random_forest = random_forest.predict(X_test)
 
 # Flask web application
 app = Flask(__name__)
@@ -41,12 +32,12 @@ def options_html(options_list):
 @app.route('/')
 def home():
     # Define dropdown options
-    manufacturers = ['bmw', 'ford', 'chevrolet', 'honda', 'toyota', 'others']
-    conditions = ['excellent', 'good', 'fair', 'like new']
-    fuel_types = ['gas', 'diesel', 'hybrid', 'other']
-    transmissions = ['automatic', 'manual', 'other']
-    drives = ['4wd', 'fwd', 'rwd']
-    colors = ['black', 'white', 'red', 'blue', 'grey', 'green']
+    manufacturers = ['bmw', 'buick', 'cadillac', 'chevrolet', 'chrysler', 'dodge', 'ford', 'gmc', 'honda', 'hyundai', 'infiniti', 'jeep', 'kia', 'lexus', 'mercedes-benz', 'nissan', 'ram', 'subaru', 'toyota', 'volkswagen', 'others'] # all added
+    conditions = ['excellent', 'fair', 'good', 'like new'] # all added
+    fuel_types = ['gas', 'diesel', 'hybrid', 'other'] # all added
+    transmissions = ['automatic', 'manual', 'other'] # all added
+    drives = ['4wd', 'fwd', 'rwd'] # all added
+    colors = ['black', 'blue', 'brown', 'custom', 'green', 'grey', 'others', 'red', 'silver', 'white']
     years = list(range(2000, 2023))
     mileages = ['0-10,000', '10,001-50,000', '50,001-100,000', '100,001-150,000', '150,001-200,000', '200,001+']
 
@@ -108,7 +99,7 @@ def evaluate():
     input_features = np.array([list(model_input.values())])
 
     # Predict the fair price
-    predicted_price = clf.predict(input_features)[0]
+    predicted_price = random_forest.predict(input_features)[0]
     difference = predicted_price - price
     assessment = "Fair" if abs(difference) < 1000 else "Unfair"
 
