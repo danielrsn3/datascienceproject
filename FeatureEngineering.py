@@ -10,6 +10,7 @@ vehicles.dtypes
 
 ####################  Ektra preprossing steps caused by data Exploration #################### 
 
+# Extra preprocessing steps caused by data Exploration
     # Creating the years_old variable and removing the original variable 'year'
 vehicles['year'] = vehicles['year'].astype('Int64') # Treat year as numeric to be able to substract
 vehicles['years_old'] = 2021 - vehicles['year']
@@ -27,8 +28,10 @@ vehicles = vehicles[vehicles['price'] < 48325]    # To exclude observations wher
     # Removing rows where price is below 1000
 vehicles = vehicles[vehicles['price'] > 1000] # To exclude damaged cars and listings with no intention of selling to that price
 
-    # Exclude cars older than 1980
-vehicles = vehicles[vehicles['years_old'] <= 30]
+print((vehicles['price'].min(), vehicles['price'].max())) # View price range
+    # Exclude cars with more than 20 years of age
+vehicles = vehicles[vehicles['years_old'] <= 20]
+
 vehicles['years_old'] = vehicles['years_old'].astype('object')
     
     # Removing rows where odometer is above 300000
