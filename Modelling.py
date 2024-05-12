@@ -80,7 +80,8 @@ print(f"Mean Squared Error: {mse_rid}") # 24648340.007159002
 
 
 
-##### Bayesian Ridge regression #####
+
+##### Bayesian Ridge regression ##### 
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
@@ -125,14 +126,15 @@ knn_regressor = KNeighborsRegressor(n_neighbors=3)
 knn_regressor.fit(X_train, y_train)
 predictions_knn = knn_regressor.predict(X_test)
 rmse_knn = np.sqrt(mean_squared_error(y_test, predictions_knn))
-print(f"Root Mean Squared Error: {rmse_knn}") # 4496.031533908051
+print(f"Root Mean Squared Error: {rmse_knn}") # 4487.2253509261645
+
 
 # 4
 knn_regressor = KNeighborsRegressor(n_neighbors=4)
 knn_regressor.fit(X_train, y_train)
 predictions_knn = knn_regressor.predict(X_test)
 rmse_knn = np.sqrt(mean_squared_error(y_test, predictions_knn))
-print(f"Root Mean Squared Error: {rmse_knn}") # 4434.555194280254
+print(f"Root Mean Squared Error: {rmse_knn}") # 4441.753654473995
 
 # 5
 knn_regressor = KNeighborsRegressor(n_neighbors=5)
@@ -143,18 +145,16 @@ rmse_knn = np.sqrt(mean_squared_error(y_test, predictions_knn))
 mae_knn = mean_absolute_error(y_test, predictions_knn)
 mse_knn = mean_squared_error(y_test, predictions_knn)
 
-print(f"Root Mean Squared Error: {rmse_knn}") # 4432.368120887695
-print(f"Mean Absolute Error: {mae_knn}") # 2753.7333264327362
-print(f"Mean Squared Error: {mse_knn}") # 19645887.15906152
+print(f"Root Mean Squared Error: {rmse_knn}") # 4425.809446480019
+print(f"Mean Absolute Error: {mae_knn}") # 2760.0960977124523
+print(f"Mean Squared Error: {mse_knn}") # 19587789.256551772
 
 # 6
 knn_regressor = KNeighborsRegressor(n_neighbors=6)
 knn_regressor.fit(X_train, y_train)
 predictions_knn = knn_regressor.predict(X_test)
 rmse_knn = np.sqrt(mean_squared_error(y_test, predictions_knn))
-print(f"Root Mean Squared Error: {rmse_knn}") # 4430.670038589296 (LAVERE END ved 5 NEIGHBORS)
-
-
+print(f"Root Mean Squared Error: {rmse_knn}") # 4433.148081128365
 
 ##### ElasticNet Regression #####
 from sklearn.linear_model import ElasticNet
@@ -178,7 +178,7 @@ print(f"Mean Squared Error: {mse_elastic_net}") # 36418322.5238362
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-random_forest = RandomForestRegressor(n_estimators=50, random_state=42)
+random_forest = RandomForestRegressor(n_estimators=500, random_state=42)
 random_forest.fit(X_train, y_train)
 predictions_random_forest = random_forest.predict(X_test)
 
@@ -186,10 +186,12 @@ rmse_random_forest = np.sqrt(mean_squared_error(y_test, predictions_random_fores
 mae_random_forest = mean_absolute_error(y_test, predictions_random_forest)
 mse_random_forest = mean_squared_error(y_test, predictions_random_forest)
 
-print(f"Root Mean Squared Error: {rmse_random_forest}") # 3428.0649056250068 med 50 n_estimators
-print(f"Mean Absolute Error: {mae_random_forest}") # 1914.1892558930567
-print(f"Mean Squared Error: {mse_random_forest}") # 11751628.997177787
+print(f"Root Mean Squared Error: {rmse_random_forest}") # 3400.640261293944 med 500 n_estimators
+print(f"Mean Absolute Error: {mae_random_forest}") # 1892.8797055297316
+print(f"Mean Squared Error: {mse_random_forest}") # 11564354.186733345
 
+# 3428.0649056250068 med 50 n_estimators
+# 3403.083633046189 med 1000 n_estimators
 
 
 ##### Random Forest Regression med hypergrid (long convergence time) #####
