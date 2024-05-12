@@ -80,6 +80,7 @@ print(f"Mean Squared Error: {mse_rid}") # 24648340.007159002
 
 
 
+
 ##### Bayesian Ridge regression ##### 
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -127,6 +128,7 @@ predictions_knn = knn_regressor.predict(X_test)
 rmse_knn = np.sqrt(mean_squared_error(y_test, predictions_knn))
 print(f"Root Mean Squared Error: {rmse_knn}") # 4487.2253509261645
 
+
 # 4
 knn_regressor = KNeighborsRegressor(n_neighbors=4)
 knn_regressor.fit(X_train, y_train)
@@ -153,7 +155,6 @@ knn_regressor.fit(X_train, y_train)
 predictions_knn = knn_regressor.predict(X_test)
 rmse_knn = np.sqrt(mean_squared_error(y_test, predictions_knn))
 print(f"Root Mean Squared Error: {rmse_knn}") # 4433.148081128365
-
 
 ##### ElasticNet Regression #####
 from sklearn.linear_model import ElasticNet
@@ -191,6 +192,7 @@ print(f"Mean Squared Error: {mse_random_forest}") # 11564354.186733345
 
 # 3428.0649056250068 med 50 n_estimators
 # 3403.083633046189 med 1000 n_estimators
+
 
 ##### Random Forest Regression med hypergrid (long convergence time) #####
 from sklearn.model_selection import GridSearchCV
