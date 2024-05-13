@@ -18,7 +18,7 @@ X_test = pd.read_pickle("./data/X_test.pkl")
 y_test = pd.read_pickle("./data/y_test.pkl")
 X_train.dtypes
 # Train the Random Forest Regressor model again (due to large files, we could not save the previously trained model)
-random_forest = RandomForestRegressor(n_estimators=30, random_state=42)
+random_forest = RandomForestRegressor(n_estimators=30, random_state=42) # 30 estimators are used in order to decreaese convergence time.
 random_forest = random_forest.fit(X_train, y_train)
 predictions_random_forest = random_forest.predict(X_test)
 
@@ -117,7 +117,15 @@ def evaluate():
     # Prepare features for model prediction
     predicted_price = random_forest.predict(input_features)[0]
     difference = predicted_price - price
-    assessment = "Fair" if abs(difference) < 1000 else "Unfair"
+    lower_bound = price * 0.9
+    upper_bound = price * 1.1
+
+    if lower_bound <= predicted_price <= upper_bound:
+        assessment = "Fair"
+    elif predicted_price > upper_bound:
+        assessment = "Underpriced"
+    elif predicted_price < lower_bound:
+        assessment = "Overpriced"
 
     return jsonify({
         'Your Price': price,
