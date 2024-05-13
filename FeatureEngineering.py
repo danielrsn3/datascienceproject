@@ -106,11 +106,12 @@ from sklearn.model_selection import train_test_split
 # Set random seed for reproducibility
 import numpy as np
 np.random.seed(123)
+vehicles.info
 # Binning prices into categories 
 bins = pd.cut(vehicles['price'], bins=50, labels=False) 
 vehicles['price_bin'] = bins
 # Splitting based on the price bins
-train_vehicles, test_vehicles = train_test_split(vehicles, test_size=0.3, stratify=vehicles['price_bin'])
+train_vehicles, test_vehicles = train_test_split(vehicles, test_size=0.3, stratify=vehicles['price'])
 # Dropping 'price_bin' from both train and test sets
 test_vehicles.drop(columns=['price_bin'], inplace=True)
 train_vehicles.drop(columns=['price_bin'], inplace=True)
