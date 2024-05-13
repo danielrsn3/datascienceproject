@@ -8,7 +8,9 @@ vehicles = pd.read_csv('Data/vehicles_Preprocessed.csv') # Uploading the data
 # Viewing data types
 vehicles.dtypes
 
-####################  Ektra preprossing steps caused by data Exploration #################### 
+####################################### Feature Engineering #######################################
+
+####### Ektra preprossing steps caused by data Exploration ##########
 
 # Extra preprocessing steps caused by data Exploration
     # Creating the years_old variable and removing the original variable 'year'
@@ -24,14 +26,12 @@ IQR = Q3 - Q1                                     # Calculate IQR
 upper_whisker = Q3 + 1.5 * IQR                    # Calculate upper whisker
 print("Upper Whisker:", upper_whisker)            # Upper whisker: 48325
 vehicles = vehicles[vehicles['price'] < 48325]    # To exclude observations where the price is above 48325 (our upper whisker from the boxplot)
-    
     # Removing rows where price is below 1000
 vehicles = vehicles[vehicles['price'] > 1000] # To exclude damaged cars and listings with no intention of selling to that price
-
 print((vehicles['price'].min(), vehicles['price'].max())) # View price range
+
     # Exclude cars with more than 20 years of age
 vehicles = vehicles[vehicles['years_old'] <= 20]
-
 vehicles['years_old'] = vehicles['years_old'].astype('object')
     
     # Removing rows where odometer is above 300000
@@ -54,9 +54,6 @@ vehicles.drop(columns=['odometer'], inplace=True)
         # Display the count of values in each bin
 print(vehicles['odometer_range'].value_counts())
 vehicles['odometer_range'] = vehicles['odometer_range'].astype('category')
-
-
-####################################### Feature Engineering #######################################
 
 # Convert each column to correct data type
 vehicles.dtypes # Checking data types
