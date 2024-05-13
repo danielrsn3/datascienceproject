@@ -32,27 +32,11 @@ print(f"Mean Squared Error: {mse}") # 24649713.39250595
 
 
 
-##### Support Vector Machines (Regression) #####
-from sklearn import svm
-svm = svm.SVR()
-svm.fit(X_train, y_train)
-predictions_svm = svm.predict(X_test)
-
-rmse_svm = np.sqrt(mean_squared_error(y_test, predictions_svm))
-mae_svm = mean_absolute_error(y_test, predictions_svm)
-mse_svm = mean_squared_error(y_test, predictions_svm)
-
-print(f"Root Mean Squared Error: {rmse_svm}") # 11431.011371518482
-print(f"Mean Absolute Error: {mae_svm}") # 8634.294913055208
-print(f"Mean Squared Error: {mse_svm}") # 130668020.97578484
-
-
-
 ##### Decision Tree #####
 from sklearn import tree
-clf = tree.DecisionTreeRegressor()
-clf = clf.fit(X_train, y_train)
-predictions = clf.predict(X_test)
+dtr = tree.DecisionTreeRegressor()
+dtr = dtr.fit(X_train, y_train)
+predictions = dtr.predict(X_test)
 
 rmse = np.sqrt(mean_squared_error(y_test, predictions))
 mae = mean_absolute_error(y_test, predictions)
@@ -61,59 +45,6 @@ mse = mean_squared_error(y_test, predictions)
 print(f"Root Mean Squared Error: {rmse}") # 4392.043777131446
 print(f"Mean Absolute Error: {mae}") # 2236.5374367097247
 print(f"Mean Squared Error: {mse}") # 19290048.540239062
-
-
-
-##### Ridge regression #####
-from sklearn import linear_model
-reg = linear_model.Ridge(alpha=.5)
-reg.fit(X_train, y_train)
-predictions_rid = reg.predict(X_test)
-
-rmse_rid = np.sqrt(mean_squared_error(y_test, predictions_rid))
-mae_rid = mean_absolute_error(y_test, predictions_rid)
-mse_rid = mean_squared_error(y_test, predictions_rid)
-
-print(f"Root Mean Squared Error: {rmse_rid}") # 4964.70945848385
-print(f"Mean Absolute Error: {mae_rid}") # 3658.007984722207
-print(f"Mean Squared Error: {mse_rid}") # 24648340.007159002
-
-
-
-
-##### Bayesian Ridge regression ##### 
-from sklearn import linear_model
-from sklearn.metrics import mean_squared_error, mean_absolute_error
-
-bay = linear_model.BayesianRidge()
-bay.fit(X_train, y_train)
-predictions_bay = bay.predict(X_test)
-
-rmse_bay = np.sqrt(mean_squared_error(y_test, predictions_bay))
-mae_bay = mean_absolute_error(y_test, predictions_bay)
-mse_bay = mean_squared_error(y_test, predictions_bay)
-
-print(f"Root Mean Squared Error: {rmse_bay}") # 4964.890065071595
-print(f"Mean Absolute Error: {mae_bay}") # 3657.97949290559
-print(f"Mean Squared Error: {mse_bay}") # 24650133.35824663
-
-
-
-##### Lasso regression #####
-from sklearn import linear_model
-from sklearn.metrics import mean_squared_error, mean_absolute_error
-
-las = linear_model.Lasso(alpha=0.1)
-las.fit(X_train, y_train)
-predictions_las = las.predict(X_test)
-
-rmse_las = np.sqrt(mean_squared_error(y_test, predictions_las))
-mae_las = mean_absolute_error(y_test, predictions_las)
-mse_las = mean_squared_error(y_test, predictions_las)
-
-print(f"Root Mean Squared Error: {rmse_las}") # 4964.881702129805
-print(f"Mean Absolute Error: {mae_las}") # 3658.1244398886734
-print(f"Mean Squared Error: {mse_las}") # 24650050.31614335
 
 
 
@@ -127,7 +58,6 @@ knn_regressor.fit(X_train, y_train)
 predictions_knn = knn_regressor.predict(X_test)
 rmse_knn = np.sqrt(mean_squared_error(y_test, predictions_knn))
 print(f"Root Mean Squared Error: {rmse_knn}") # 4487.2253509261645
-
 
 # 4
 knn_regressor = KNeighborsRegressor(n_neighbors=4)
@@ -156,22 +86,6 @@ predictions_knn = knn_regressor.predict(X_test)
 rmse_knn = np.sqrt(mean_squared_error(y_test, predictions_knn))
 print(f"Root Mean Squared Error: {rmse_knn}") # 4433.148081128365
 
-##### ElasticNet Regression #####
-from sklearn.linear_model import ElasticNet
-from sklearn.metrics import mean_squared_error, mean_absolute_error
-
-elastic_net = ElasticNet(alpha=0.1, l1_ratio=0.5)
-elastic_net.fit(X_train, y_train)
-predictions_elastic_net = elastic_net.predict(X_test)
-
-rmse_elastic_net = np.sqrt(mean_squared_error(y_test, predictions_elastic_net))
-mae_elastic_net = mean_absolute_error(y_test, predictions_elastic_net)
-mse_elastic_net = mean_squared_error(y_test, predictions_elastic_net)
-
-print(f"Root Mean Squared Error: {rmse_elastic_net}") # 6034.759524938521
-print(f"Mean Absolute Error: {mae_elastic_net}") # 4474.25646935197
-print(f"Mean Squared Error: {mse_elastic_net}") # 36418322.5238362
-
 
 
 ##### Random Forest Regression #####
@@ -192,6 +106,7 @@ print(f"Mean Squared Error: {mse_random_forest}") # 11564354.186733345
 
 # 3428.0649056250068 med 50 n_estimators
 # 3403.083633046189 med 1000 n_estimators
+
 
 
 ##### Random Forest Regression med hypergrid (long convergence time) #####
@@ -271,17 +186,3 @@ rmse_grid_search_gb = np.sqrt(mean_squared_error(y_test, predictions_grid_search
 print(f"Gradient Boosting Regression Root Mean Squared Error: {rmse_grid_search_gb}") # HAR IKKE KØRT DENNE
 
 
-# PLOT WITH RESULTS #
-import matplotlib.pyplot as plt
-# Sort the DataFrame by RMSE in descending order
-results_df_sorted = results_df.sort_values(by='RMSE', ascending=False)
-# Set the style of the plot
-plt.style.use('seaborn-darkgrid')
-# Create a bar plot
-plt.figure(figsize=(10, 6))
-plt.barh(results_df_sorted['Model'], results_df_sorted['RMSE'], color='skyblue')
-plt.xlabel('Root Mean Squared Error (RMSE)')
-plt.ylabel('Model')
-plt.title('Comparison of RMSE for Different Models')
-plt.tight_layout()
-plt.show() # Show the plot
