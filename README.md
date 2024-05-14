@@ -5,10 +5,10 @@ Repos for the second part of the data science project
 # Files in datascienceproject
 Data preprocessing
 
-Data exploration
+Exploration
 
-Data feature engineering
+Feature engineering
 
-Data modelling
+Modelling
 
 App
