@@ -2,7 +2,7 @@
 Repos for the second part of the data science project
 
 
-# Four files
+# Files within datascienceproject
 Data preprocessing
 
 Data exploration
